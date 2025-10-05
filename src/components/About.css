@@ -1,0 +1,156 @@
+.about-section {
+  padding: 80px 60px;
+  background: #fafafa;
+  color: #111;
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.dark .about-section {
+  background: #111;
+  color: #eee;
+}
+
+/* LEFT: Image */
+.about-image {
+  width: 40%;
+  max-height: 50vh;
+  object-fit: cover;
+  border-radius: 8px;
+} 
+
+/* RIGHT: All text column */
+.about-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  min-width: 300px;
+}
+
+.about-top {
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+/* Name + tagline */
+.about-intro p {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  line-height: 1.6;
+
+}
+
+/* Skills */
+.skills h3 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+  font-family: 'Swearlight', sans-serif;
+}
+
+/* About.css */
+
+/* ... (Keep existing layout styles for about-section, about-image, etc.) ... */
+
+/* --- SKILLS STYLES (New Focus Area) --- */
+
+.skill-cloud {
+    /* Reset this container to not enforce layout, as children are now absolute */
+    position: relative; 
+    min-height: 250px; /* Give a large area for the skills to initially disperse */
+    width: 100%;
+    /* Remove flex properties */
+}
+
+.skill-wrapper {
+    /* 🔥 CRITICAL for free positioning and initial placement */
+    position: absolute; 
+    
+    /* Center the skill-wrapper over the content */
+    transform: translate(-50%, -50%); 
+    
+    /* Ensure the wrapper respects the drag effects */
+    cursor: grab;
+}
+
+/* ------------------------------------- */
+/* --- HOVER MESSAGE STYLES --- */
+/* ------------------------------------- */
+
+.skill-message {
+    position: absolute;
+    top: -30px; /* Position above the skill block */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    pointer-events: none; /* Allows click-through to drag the wrapper */
+}
+
+/* ------------------------------------- */
+/* --- SKILL BLOCK (Custom Shapes) --- */
+/* ------------------------------------- */
+
+
+.skill-svg {
+    /* Set display block and max size */
+    display: block; 
+    max-width: 150px; /* Max width for your largest shape */
+    height: auto;
+    /* Remove padding/border/clip-path from here, as they are in the SVG code */
+}
+
+.skill {
+    display: block; /* Important for clip-path to work well */
+    padding: 10px 20px;
+    border: 2px solid black;
+    background-color: #f0f0f0; 
+    font-weight: 600;
+}
+
+
+
+/* Divider line */
+.about-divider {
+  border: none;
+  border-top: 1px solid #aaa;
+  margin: 20px 0;
+}
+
+/* Bottom half: Experience + Education */
+.about-bottom {
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.experience,
+.education {
+  flex: 1;
+  min-width: 250px;
+  max-width: 500px;
+}
+
+.experience h3,
+.education h3 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  font-family: 'Swearlight', sans-serif;
+}
+
+.experience p,
+.education p {
+  margin-bottom: 16px;
+  line-height: 1.5;
+  font-size: 1rem;
+}

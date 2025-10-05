@@ -1,0 +1,76 @@
+/* src/components/DarkModeToggle.css - Final Clean Switch */
+
+/* 1. Base Container (The Track) */
+.theme-switch {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  width: 60px; /* Wider track */
+  height: 34px; /* Taller track */
+}
+
+.switch-checkbox {
+  display: none;
+}
+
+/* 2. The Slider/Knob (The handle and visual container) */
+.switch-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 34px;
+  background-color: #90a4b9; /* Dark track for Light Mode (Moon appears on dark) */
+  transition: 0.4s;
+}
+
+/* ::before: The physical knob */
+.switch-slider::before {
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  border-radius: 50%;
+  background-color: #ffffff; /* Yellow for the Sun/Light Mode */
+  transition: 0.4s;
+}
+
+/* ::after: The Moon/Crescent icon (visible in Dark Mode) */
+.switch-slider::after {
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  border-radius: 50%;
+  background: transparent;
+  
+  /* Creates the crescent moon effect */
+  box-shadow: inset -8px 0 0 0 #bdc3c7; /* Light gray moon */
+  transition: 0.4s;
+  opacity: 0; /* Hidden in Light Mode */
+}
+
+/* --- Dark Mode State (Checkbox is Checked) --- */
+
+/* Move the knob to the right */
+.switch-checkbox:checked + .switch-slider::before {
+  transform: translateX(26px); /* Move knob right (60px track - 26px knob - 4px*2 padding = 26px offset) */
+  background-color: transparent; /* Sun fades */
+}
+
+/* Track color changes for Dark Mode */
+.switch-checkbox:checked + .switch-slider {
+  background-color: #434343; /* Light track for Dark Mode */
+}
+
+/* Moon appears and moves with the knob */
+.switch-checkbox:checked + .switch-slider::after {
+  opacity: 1; /* Moon appears */
+  transform: translateX(26px); /* Moves moon right */
+  box-shadow: inset -8px 0 0 0 #f0f3f6; /* Darker moon color on light background */
+}

@@ -1,0 +1,73 @@
+.footer {
+    background-color: rgba(75, 68, 57, 0.7);
+    border-bottom: 2px;
+    border-color: white;
+}
+
+/* Footer.css */
+
+.footer {
+    /* Basic footer styling */
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    align-content: center;
+    height: 50vh;
+    overflow: hidden;
+      justify-content: stretch;
+}
+
+.playground-link-wrap {
+    /* IMPORTANT: Makes the 'playground' word the position context */
+    position: relative;
+    display: inline-block; /* Wraps tightly around the link */
+    cursor: pointer;
+    z-index: 10;
+}
+
+.playground-link {
+    /* Style the main text */
+  font-family: 'Swearlight', sans-serif;
+  font-size: 20vw; 
+  font-weight: 400;
+  color: rgb(255, 255, 255);
+    text-decoration: none;
+    z-index: 10;
+}
+
+/* Container for all the floating labels */
+.burst-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; /* Give it space to spread out */
+    height: 100px;
+    pointer-events: none; /* Allows clicks to go through to the link underneath */
+    z-index: 5;
+}
+
+/* Individual floating labels/images */
+.burst-item {
+    position: absolute;
+    white-space: nowrap; /* Prevents text from wrapping */
+    font-size: 0.9rem;
+    color: #ff0000; /* Red color for a playful look */
+    background: #fff;
+    padding: 3px 6px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.burst-image {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+/* 💡 Optional: Define initial positions for burst items 
+      to fine-tune where they appear relative to the center */
+.item-0 { top: 30px; left: 300px; }
+.item-1 { top: 0px; right: 0px; }
+.item-2 { top: 40px; right: 50px; }
+.item-3 { bottom: 100px; left: 40px; }

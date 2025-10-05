@@ -1,0 +1,85 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* 🔥 MUST be fixed, not sticky, to scroll with the page */
+    width: 100%;
+    padding: 1rem 2rem;
+    top: 0;
+    z-index: 40;
+    
+    /* 🔥 Initial state for the animation. Framer Motion will override these, 
+       but they define the style properties. */
+    border-bottom-style: solid;
+    border-color: transparent; /* Initially transparent */
+    background-color: transparent; /* Initially transparent */
+    
+}
+  
+  .dark .navbar {
+    background-color: #111;
+    border-color: #333;
+    color: #ddd;
+  }
+  
+  .navbar-title {
+    font-weight: light;
+    font-size: 1.2rem;
+    overflow: hidden;
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    font-weight: light;
+  }
+  
+  .navbar-toggle {
+    margin-left: center;
+    padding-left: 1rem;
+  }
+  
+
+/* 1. Ensure the Anchor Tag is the Relative Context */
+.navbar-links a {
+    color: inherit;
+    /* 💥 Set the anchor tag to be the positioning context */
+    position: relative; 
+    /* 💥 It must be inline-block to shrink-wrap the text and the wrapper */
+    display: inline-block; 
+}
+
+/* 2. The Scribble Wrapper Must Shrink-Wrap */
+.scribble-link-wrapper {
+    display: inline-block; 
+    overflow: visible !important;
+}
+
+/* 3. Scribble SVG Positioning */
+.scribble-svg {
+    position: absolute;
+    /* Adjust these values to perfectly center the scribble over the text */
+    /* top: -50% centers the path vertically */
+    top: -50%; 
+    /* left: -20% gives room for the scribble's rough start/end */
+    left: -20%; 
+    
+    /* Scale the SVG based on your font size */
+    width: 140%; 
+    height: 300%; 
+    
+    z-index: 1; 
+    pointer-events: none;
+}
+
+/* 4. Text Content Must Be on Top */
+.scribble-content {
+    position: relative; 
+    z-index: 2; 
+    padding: 0 5px; /* Keeps the text clear of the scribble lines */
+}

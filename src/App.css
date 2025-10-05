@@ -1,0 +1,25 @@
+/* App.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Swearlight'; /* ⬅️ This is the name you will use in your CSS */
+  src: url('./assets/fonts/SwearDisplayDemo-LightCilati.otf') format('opentype');
+  font-weight: 400; /* Regular weight */
+  font-display: swap; /* Tells the browser how to handle loading (swap is usually best) */
+}
+
+/* Add this at the very top of your App.css */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+.main {
+    @apply bg-zinc-50 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-50 transition-colors duration-500 ;
+  }
+
+  
+  

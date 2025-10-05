@@ -1,0 +1,17 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'OhnoThin'; /* ⬅️ This is the name you will use in your CSS */
+  src: url('./assets/fonts/OhnoCasualDemo-Thin.otf') format('otf');
+  font-weight: 400; /* Regular weight */
+  font-style: normal;
+  font-display: swap; /* Tells the browser how to handle loading (swap is usually best) */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
