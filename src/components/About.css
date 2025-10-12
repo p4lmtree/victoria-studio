@@ -1,91 +1,94 @@
+/* About.css - FINAL RESPONSIVE VERSION */
+
+/* =================================================================== */
+/* 1. MOBILE FIRST BASE STYLES (< 992px) - Single Column Stack         */
+/* =================================================================== */
+
 .about-section {
-  padding: 80px 60px;
-  background: #fafafa;
+  /* Reduced padding for mobile */
+  padding: 4rem 1.5rem; 
+  background: #fafafa00;
   color: #111;
-  display: flex;
-  flex-direction: row;
-  gap: 60px;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  /* Removed gap/flex-wrap - let the grid handle the layout */
 }
 
+/* Dark mode support */
 .dark .about-section {
   background: #111;
   color: #eee;
 }
 
-/* LEFT: Image */
-.about-image {
-  width: 40%;
-  max-height: 50vh;
-  object-fit: cover;
-  border-radius: 8px;
-} 
-
-/* RIGHT: All text column */
-.about-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  min-width: 300px;
+.about-grid-container {
+  display: grid;
+  /* MOBILE DEFAULT: Force a single column flow */
+  grid-template-columns: 1fr; 
+  /* Minimal gap between stacked sections */
+  gap: 3rem; 
+  width: 100%;
 }
 
-.about-top {
-  display: flex;
-  gap: 60px;
-  flex-wrap: wrap;
+/* Ensure the stacked columns flow in a logical order on mobile */
+/* H1 -> Intro -> Experience -> Skills -> Education */
+.column-1 { order: 1; } /* Name/Hei! */
+.column-2 { order: 2; } /* Intro/Contact */
+.column-3 { order: 3; } /* Experience/Skills Box */
+.column-4 { order: 4; } /* Education */
+
+
+/* --- Text and Element Styling --- */
+
+p {
+  font-size: 1rem; /* Increase text size for better mobile readability */
+  line-height: 1.5;
 }
 
-/* Name + tagline */
-.about-intro p {
-  margin: 0 0 10px;
-  font-size: 1rem;
-  line-height: 1.6;
-
+.about-name {
+  /* Smaller clamp size for mobile */
+  font-size: clamp(2.5rem, 10vw, 3rem); 
+  font-weight: 500;
+  line-height: 1.1;
+  margin: 0;
 }
 
-/* Skills */
-.skills h3 {
-  margin-bottom: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  font-size: 1.5rem;
-  font-family: 'Swearlight', sans-serif;
+/* Clear the default column spacing */
+.about-column {
+  background-color: transparent;
+  padding: 0;
 }
 
-/* About.css */
+/* Skills Box: Ensure it has space to breathe in the vertical flow */
+.about-skills-box {
+  background-color: #c3c3c3; 
+  /* Reduced minimum height on mobile */
+  min-height: 250px; 
+  padding: 1.5rem;
+  margin-top: 2rem; 
+}
+.dark .about-skills-box {
+    background-color: #333;
+}
 
-/* ... (Keep existing layout styles for about-section, about-image, etc.) ... */
 
-/* --- SKILLS STYLES (New Focus Area) --- */
+/* --- SKILLS CLOUD STYLES (Keep initial randomization visible) --- */
 
 .skill-cloud {
-    /* Reset this container to not enforce layout, as children are now absolute */
     position: relative; 
-    min-height: 250px; /* Give a large area for the skills to initially disperse */
+    /* Set a contained area large enough for skills to scatter */
+    min-height: 200px; 
     width: 100%;
-    /* Remove flex properties */
+    /* On mobile, skills might overlap, but dragging should solve it */
+    overflow: visible;
 }
 
 .skill-wrapper {
-    /* 🔥 CRITICAL for free positioning and initial placement */
     position: absolute; 
-    
-    /* Center the skill-wrapper over the content */
     transform: translate(-50%, -50%); 
-    
-    /* Ensure the wrapper respects the drag effects */
     cursor: grab;
 }
 
-/* ------------------------------------- */
-/* --- HOVER MESSAGE STYLES --- */
-/* ------------------------------------- */
-
 .skill-message {
     position: absolute;
-    top: -30px; /* Position above the skill block */
+    top: -30px; 
     left: 50%;
     transform: translateX(-50%);
     background-color: black;
@@ -94,63 +97,54 @@
     border-radius: 4px;
     font-size: 0.75rem;
     white-space: nowrap;
-    pointer-events: none; /* Allows click-through to drag the wrapper */
+    pointer-events: none;
 }
-
-/* ------------------------------------- */
-/* --- SKILL BLOCK (Custom Shapes) --- */
-/* ------------------------------------- */
-
 
 .skill-svg {
-    /* Set display block and max size */
     display: block; 
-    max-width: 150px; /* Max width for your largest shape */
+    max-width: 120px; /* Reduced max size for mobile skill shapes */
     height: auto;
-    /* Remove padding/border/clip-path from here, as they are in the SVG code */
 }
 
-.skill {
-    display: block; /* Important for clip-path to work well */
-    padding: 10px 20px;
-    border: 2px solid black;
-    background-color: #f0f0f0; 
-    font-weight: 600;
-}
+/* =================================================================== */
+/* 2. DESKTOP OVERRIDE (>= 992px) - 4 Column Grid                      */
+/* =================================================================== */
+@media (min-width: 992px) {
+  .about-section {
+    padding: 6rem 4rem;
+  }
+  
+  .about-grid-container {
+    /* Revert to the 4 column layout for desktop */
+    grid-template-columns: 1.2fr 1fr 1.5fr 1fr; 
+    gap: 1.5rem; 
+  }
+  
+  /* Reset the order for the intended visual flow */
+  .column-1 { order: 0; }
+  .column-2 { order: 0; }
+  .column-3 { order: 0; }
+  .column-4 { order: 0; }
+  
+  p {
+    font-size: 0.8rem; /* Revert to smaller text size for dense desktop layout */
+  }
 
+  .about-name {
+    font-size: clamp(3rem, 5vw, 4rem); /* Revert to larger font */
+  }
 
-
-/* Divider line */
-.about-divider {
-  border: none;
-  border-top: 1px solid #aaa;
-  margin: 20px 0;
-}
-
-/* Bottom half: Experience + Education */
-.about-bottom {
-  display: flex;
-  gap: 60px;
-  flex-wrap: wrap;
-}
-
-.experience,
-.education {
-  flex: 1;
-  min-width: 250px;
-  max-width: 500px;
-}
-
-.experience h3,
-.education h3 {
-  margin-bottom: 10px;
-  font-size: 1.5rem;
-  font-family: 'Swearlight', sans-serif;
-}
-
-.experience p,
-.education p {
-  margin-bottom: 16px;
-  line-height: 1.5;
-  font-size: 1rem;
+  .about-skills-box {
+      /* Revert to desktop min height */
+      min-height: 200px; 
+  }
+  
+  .skill-cloud {
+      /* Revert to desktop min height */
+      min-height: 100px;
+  }
+  
+  .skill-svg {
+      max-width: 150px; /* Revert to larger skill shapes */
+  }
 }

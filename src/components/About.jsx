@@ -60,64 +60,51 @@ const SKILL_LIST = [
 const About = () => {
   return (
     <section id="about" className="about-section">
-      <img
-        src={profileImage}
-        alt="Victoria Plasteig"
-        className="about-image"
-      />
+      {/* ⚠️ The main change is within this div, using THREE columns ⚠️ */}
+      <div className="about-grid-container">
+        
+        {/* === COLUMN 1: Name and Profile Image Area === */}
+        <div className="about-column column-1">
+          <h1 className="about-name">
+            Hei!
+          </h1>
+          {/* You can add your profile image here if you want it in the first column */}
+          {/* <img src={profileImage} alt="Victoria Plasteig" className="about-image" /> */}
+        </div>
 
-      <div className="about-content">
-        <div className="about-top">
-          <div className="about-intro">
-            <p>
-              <strong>Victoria Plasteig</strong><br />
-              <em>— All rights reserved.</em>
-            </p>
-            <p>Visual Designer / Brand Storyteller.</p>
-            <p>Looking forward to develop<br />amazing projects together.</p>
+        {/* === COLUMN 2: Intro/Contact and Experience === */}
+        <div className="about-column column-2">
+          <div className="about-intro-contact">
+            <p>Looking forward to develop amazing projects together.</p>
+            <p>Cool ideas? Let's talk! Drop me an email or draw me a postcard on the playground.</p>
+          </div>
+        </div>
+
+        <div className="about-column column-3"> 
+          <div className="experience">
+           <p>Art Direction</p>
+           <p>Creative Strategy</p>
           </div>
 
-          <div className="skills">
-            <h3>Skills</h3>
-            {/* The skill-cloud is no longer a constraint box, just a wrapper */}
+                    <div className="about-skills-box">
             <div className="skill-cloud">
               {SKILL_LIST.map((skill, index) => (
                 <DraggableSkill key={skill} skill={skill} index={index} />
               ))}
             </div>
           </div>
+          
         </div>
 
-        {/* ... (Rest of the component remains the same) ... */}
-        <hr className="about-divider" />
-        <div className="about-bottom">
-          {/* ... (Existing Experience and Education Content) ... */}
-          <div className="experience">
-            <h3>Experience</h3>
-            <p>Freelancing<br />(2020 — Now)</p>
-            <p>Creative Designer,<br />
-              Vorm de Stad<br />(Amsterdam, NL)<br />
-              (April 2024 — Now)</p>
-              <p>Digital Designer,<br />
-              EDHV, Architects of Identity<br />(Eindhoven, NL)<br />
-              (June 2022 — June 2023)</p>
-            <p>Graphic Design Intern,<br />
-              Piet Hein Eek (Eindhoven, NL)<br />
-              (Feb 2022 — June 2022)</p>
-          </div>
-
+        {/* === COLUMN 3: Education and Skills Box (The dark grey box) === */}
+        <div className="about-column column-4">
           <div className="education">
-            <h3>Education</h3>
-            <p>Master Critical Inquiry Lab,<br />
-              Design Academy Eindhoven (NL)<br />
-              (2018 — 2021)</p>
-            <p>Bachelor of Arts, Design and Medias,<br />
-              Université Paris-Sorbonne (FR)<br />
-              (2016 — 2018)</p>
-            <p>Bachelor of Product Design,<br />
-              ENSAAMA, Olivier de Serres (FR)</p>
+            <p>Master Critical Inquiry Lab,<br />Design Academy Eindhoven (NL)</p>
+            <p>Bachelor of Arts, Design and Medias,<br />Université Paris-Sorbonne (FR)</p>
+            <p>Bachelor of Product Design,<br />ENSAAMA, Olivier de Serres (FR)</p>
           </div>
         </div>
+        
       </div>
     </section>
   );

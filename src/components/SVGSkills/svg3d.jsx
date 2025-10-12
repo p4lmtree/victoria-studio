@@ -6,8 +6,8 @@ const Svg3D = (props) => (
     viewBox="0 0 583.48 583.48" 
     
     // Set a predictable size for the overall wrapper (this will override the viewBox's scaling in the DOM)
-    width="100" 
-    height="100"
+    width="80" 
+    height="80"
     
     // Set a default fill/stroke color for your skill block
     fill="#000000" 

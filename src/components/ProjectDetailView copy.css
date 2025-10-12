@@ -1,0 +1,306 @@
+
+/* ProjectDetailView.css - place in src/components and import in the component */
+
+:root {
+  --bg: #efefef00;
+  --panel-bg: #e6e6e600;
+  --muted: #666;
+}
+
+.project-detail {
+  position: relative;
+  padding: 48px 56px;
+  padding-top: 100px;
+  min-height: 100vh;
+  background: transparent;
+  color: #111;
+}
+
+.dark .project-detail {
+  color: #ffffff;
+}
+
+.close-btn {
+  cursor: pointer;
+  z-index: 999; /* Ensure it is above everything */
+  transition: color 0.3s;
+  color: #111;
+  top: 10px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1.5px solid rgba(17, 17, 17, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-icon-svg {
+    /* Controls the size of the cross icon itself */
+    width: 18px; 
+    height: 18px;
+}
+
+.dark .close-btn {
+    color: white;
+  background-color: rgba(40, 40, 40, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+/* two-column grid: narrow meta + wide content */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 36px;
+  align-items: start;
+  max-width: flex;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+/* LEFT meta column (light grey card) */
+.meta-column {
+  background: var(--panel-bg);
+  padding: 0;
+  min-height: 220px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 100px;
+  z-index: 910;
+}
+
+.meta-pill {
+  width: 56px;
+  height: 14px;
+  background: #cfcfcf;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.meta-title {
+  font-size: 4rem;
+  margin: 6px 0;
+  font-family: 'Swearlight';
+
+}
+
+.meta-sub {
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.meta-keywords {
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 1.1rem;
+
+}
+
+.meta-date {
+  margin-top: auto;
+  font-size: 1.1rem;
+  color: var(--muted);
+  padding-top: 10%;
+}
+
+/* RIGHT content column */
+.content-column {
+  background: var(--panel-bg);
+  padding: 36px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  top: 80px;
+
+}
+
+/* text blocks */
+.main-text p,
+.more-text p {
+  margin: 0 0 1rem 0;
+  max-width: 56ch;
+  color: #222;
+  line-height: 1.6;
+}
+
+.dark .main-text p,
+.more-text p {
+  color: #ffffff;
+}
+
+/* collage container (relative) */
+.collage-wrap {
+  width: 100%;
+  min-height: 30px;
+  position: relative;
+  /* optional subtle inner padding */
+  padding: 20px 10px;
+}
+
+/* inner collage where images are absolutely placed */
+.collage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 30vh; /* force visible space */
+}
+
+.image-full {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px; /* force visible space */
+  color: #444;
+}
+
+/* basic image styling (all images) */
+.collage-item {
+  position: absolute;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(255, 248, 248, 0.028);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  cursor: pointer;
+}
+
+.image-full-item {
+  position: absolute;
+  object-fit: cover;
+  box-shadow: 0 6px 18px rgba(255, 248, 248, 0.06);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  cursor: pointer;
+}
+
+/* hover lift */
+.collage-item:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+}
+
+/* DEFAULT fixed placements (tweak these to taste)
+   They provide that "loose collage" aesthetic.
+   Add more image-N rules if some projects have more images. */
+
+.image-0 { width: 34%; height: 48%; left: 12%; top: 18%; transform: rotate(-2deg); }
+.image-1 { width: 20%; height: 18%; left: 68%; top: 18%; transform: rotate(3deg); }
+.image-2 { width: 36%; height: 34%; left: 48%; top: 48%; transform: rotate(1deg); }
+.image-3 { width: 18%; height: 22%; left: 80%; top: 6%; transform: rotate(-1.5deg); }
+.image-4 { width: 22%; height: 28%; left: 8%; top: 60%; transform: rotate(2deg); }
+.image-5 { width: 16%; height: 16%; left: 78%; top: 74%; transform: rotate(-3deg); }
+
+/* responsive: single column for small screens */
+@media (max-width: 900px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .meta-column {
+    order: 1;
+    width: auto;
+  }
+
+  .content-column {
+    order: 2;
+  }
+
+  .back-btn { left: 8px; top: 12px; transform: none; }
+}
+
+.intro-block {
+  margin: 1.5rem 0;
+  max-width: 65vw;
+  line-height: 1.6;
+  font-weight: 450;
+  font-size: 1.2rem;
+}
+
+.dark .intro-block {
+  color: #fff;
+}
+
+.text-block {
+  margin: 1.5rem 0;
+  max-width: 65vw;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.dark .text-block {
+  color: #fff;
+}
+
+.single-image {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.single-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ProjectDetailView.css */
+
+.meta-keywords {
+    /* Styles for the container of all keywords */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Spacing between keyword items */
+}
+
+.keyword-item {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f0f0f0; 
+    padding: 10px 15px;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 400;
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.dark .keyword-item {
+    background-color: #414141; 
+}
+
+.keyword-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible; 
+}
+
+.keyword-svg.freeform {
+    /* We make the SVG container larger than the pill itself 
+       to allow the path to draw outside the bounds. */
+    width: 80%; 
+    height: 80%; /* Increased height */
+    top: -40%; /* Shift up */
+    left: -20%; /* Shift left */
+}
+
+.dark .svgpath {
+  stroke: white;
+}
+
+.svgpath {
+    z-index: 40;
+}
+

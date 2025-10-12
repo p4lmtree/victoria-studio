@@ -1,85 +1,159 @@
+/* Navbar.css - FINAL RESPONSIVE VERSION */
+
+/* =================================================================== */
+/* 1. DESKTOP/BASE STYLES (Applies to all screens)                     */
+/* =================================================================== */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed; /* 🔥 MUST be fixed, not sticky, to scroll with the page */
+    position: fixed; 
     width: 100%;
     padding: 1rem 2rem;
     top: 0;
     z-index: 40;
     
-    /* 🔥 Initial state for the animation. Framer Motion will override these, 
-       but they define the style properties. */
     border-bottom-style: solid;
-    border-color: transparent; /* Initially transparent */
-    background-color: transparent; /* Initially transparent */
-    
+    border-color: transparent; 
+    background-color: transparent; 
 }
   
-  .dark .navbar {
-    background-color: #111;
-    border-color: #333;
+.dark .navbar {
+    /* Base dark mode styles (will be blended by Framer Motion on scroll) */
     color: #ddd;
-  }
+}
   
-  .navbar-title {
-    font-weight: light;
+.navbar-title {
+    font-weight: 300;
     font-size: 1.2rem;
     overflow: hidden;
-  }
-  
-  .navbar-links {
+    z-index: 101; /* Ensure title is on top of the menu */
+}
+
+/* Links are shown horizontally by default (desktop) */
+.navbar-links {
     display: flex;
     gap: 2rem;
     list-style: none;
-  }
+    margin: 0;
+    padding: 0;
+}
   
-  .navbar-links a {
+.navbar-links a {
     text-decoration: none;
-    font-weight: light;
-  }
+    font-weight: 300;
+}
   
-  .navbar-toggle {
-    margin-left: center;
+.navbar-toggle {
+    margin-left: 1rem;
     padding-left: 1rem;
-  }
-  
+    z-index: 101; /* Ensure toggle is on top of the menu */
+}
 
-/* 1. Ensure the Anchor Tag is the Relative Context */
+/* Hamburger button is hidden by default (desktop) */
+.menu-toggle {
+    display: none; 
+}
+
+/* ------------------------------------- */
+/* SCRIBBE ON HOVER STYLES (UNCHANGED)   */
+/* ------------------------------------- */
+
 .navbar-links a {
     color: inherit;
-    /* 💥 Set the anchor tag to be the positioning context */
     position: relative; 
-    /* 💥 It must be inline-block to shrink-wrap the text and the wrapper */
     display: inline-block; 
 }
 
-/* 2. The Scribble Wrapper Must Shrink-Wrap */
 .scribble-link-wrapper {
     display: inline-block; 
     overflow: visible !important;
 }
 
-/* 3. Scribble SVG Positioning */
 .scribble-svg {
     position: absolute;
-    /* Adjust these values to perfectly center the scribble over the text */
-    /* top: -50% centers the path vertically */
     top: -50%; 
-    /* left: -20% gives room for the scribble's rough start/end */
     left: -20%; 
-    
-    /* Scale the SVG based on your font size */
     width: 140%; 
     height: 300%; 
-    
     z-index: 1; 
     pointer-events: none;
 }
 
-/* 4. Text Content Must Be on Top */
 .scribble-content {
     position: relative; 
     z-index: 2; 
-    padding: 0 5px; /* Keeps the text clear of the scribble lines */
+    padding: 0 5px; 
+}
+
+/* =================================================================== */
+/* 2. MOBILE OVERRIDE (@media max-width: 768px)                        */
+/* =================================================================== */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem 1rem; /* Reduced padding on mobile */
+    }
+
+    /* Show hamburger button */
+    .menu-toggle {
+        display: block; 
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        z-index: 101;
+    }
+    
+    /* Hide desktop links and prepare for fullscreen takeover */
+    .navbar-links {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
+        /* Fallback background if Framer Motion isn't applied */
+        background-color: var(--bg-color-mobile, #fdfdfd); 
+        z-index: 100;
+    }
+
+    /* Styles for when the mobile menu is open */
+    .navbar-links.open {
+        display: flex; /* Show the menu */
+    }
+
+    .navbar-links li {
+        padding: 1rem 0;
+        font-size: 1.8rem;
+    }
+    
+    /* HAMBURGER STYLING */
+    .hamburger {
+        width: 25px;
+        height: 3px;
+        background-color: currentColor; /* Use text color */
+        position: relative;
+        transition: background-color 0.3s;
+    }
+
+    .hamburger::before,
+    .hamburger::after {
+        content: '';
+        width: 25px;
+        height: 3px;
+        background-color: currentColor;
+        position: absolute;
+        transition: transform 0.3s ease, top 0.3s ease;
+    }
+
+    .hamburger::before { top: -8px; }
+    .hamburger::after { top: 8px; }
+
+    .hamburger.open { background-color: transparent; }
+    .hamburger.open::before { transform: rotate(45deg); top: 0; }
+    .hamburger.open::after { transform: rotate(-45deg); top: 0; }
 }
