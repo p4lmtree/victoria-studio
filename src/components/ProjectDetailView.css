@@ -4,7 +4,7 @@
   --bg: #efefef00;
   --panel-bg: #e6e6e600;
   --muted: #666;
-  --max-content-width: 750px; /* Optional: Sets a max width for text blocks */
+  --max-content-width: 1000px; /* Optional: Sets a max width for text blocks */
 }
 
 /* =================================================================== */
@@ -43,8 +43,8 @@
   color: #111;
   top: 10px;
   left: 10px;
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.8);
   border: 1.5px solid rgba(17, 17, 17, 0.3);
@@ -77,8 +77,11 @@
 .meta-title {
   /* Fluid typography for titles */
   font-size: clamp(2.5rem, 10vw, 4rem); 
+  line-height: 1;
   margin: 0;
   font-family: 'Swearlight';
+  padding-top: 5%;
+  padding-bottom: 5%;
 }
 
 /* CONTENT COLUMN (Text and Images) */
@@ -154,12 +157,16 @@
     top: 100px;
     z-index: 910;
     order: 0; /* Reset order to standard flow */
-    
     padding: 0; /* Adjust padding as necessary for your design */
   }
 
   .meta-title {
     font-size: 4rem; /* Revert to fixed desktop size */
+  }
+
+  .meta-date {
+    padding-top: 5%;
+    font-size: 1.1rem; 
   }
 
   /* Reintroduce the right column padding */
@@ -169,8 +176,12 @@
   
   /* Reintroduce max-width for better reading experience on desktop */
   .intro-block, .text-block {
-      max-width: var(--max-content-width); 
       font-size: 1.1rem;
+  }
+
+ p {
+      font-size: 1.1rem;
+      font-weight: 400;
   }
 
   /* Reintroduce the collage overlap/fixed positioning */
@@ -209,6 +220,7 @@
     flex-wrap: wrap;
     gap: 8px;
     font-size: 1rem;
+    padding-top: 5%;
 }
 
 .keyword-item {

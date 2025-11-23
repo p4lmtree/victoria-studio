@@ -40,7 +40,8 @@ const MainPortfolioLayout = () => {
             setSelectedProjectId={setSelectedProjectId}
           />
           <About />
-          <Footer />
+          
+          {/* Footer /> */}
         </div>
       </div>
     </div>
@@ -54,11 +55,11 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         
-        {/* Route 1: Home Page - Renders the entire portfolio structure */}
+{/* Route 1: Home Page */}
         <Route path="/" element={<MainPortfolioLayout />} />
         
-        {/* Route 2: Standalone Playground Page - Renders ONLY the Playground component */}
-        <Route path="/playground" element={<Playground />} />
+        {/* Route 2: Standalone Playground Page - TEMPORARILY DISABLED */}
+        {/* <Route path="/playground" element={<Playground />} /> */}
         
       </Routes>
     </BrowserRouter>

@@ -1,6 +1,3 @@
-/* Header.css - FINAL RESPONSIVE VERSION */
-
-/* Add this to ensure true full-screen behavior and no unwanted scrollbars */
 html, body {
   margin: 0;
   padding: 0;
@@ -14,9 +11,13 @@ html, body {
 
 .header-container {
   /* This height controls the animation duration. Keep it large. */
-  height: 450vh; 
+  height: 200vh; 
   position: relative;
-  background-color: #ffffff00;
+  background-color: #ffffff;
+}
+
+.dark .header-container {
+  background-color: rgb(30, 30, 30);
 }
 
 .header-sticky {
@@ -38,76 +39,129 @@ html, body {
   height: 100vh;
   z-index: -10;
   will-change: filter;
-  background-image: url('./images/bg2.webp'); 
   background-size: cover; 
   background-position: center; 
   background-attachment: scroll; 
 }
 
-/* === HEADER BANDS (Applies to all screens, later overridden) === */
+.background-video {
+  /* Ensure the video covers the full area of its parent (.background-blur-fixed) */
+  width: 100%;
+  height: 100%;
+  
+  /* Fill the viewport while maintaining aspect ratio */
+  object-fit: cover; 
+  
+  /* Place it absolutely inside the fixed parent */
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  /* IMPORTANT: The fixed div applies the blur filter to its contents (the video) */
+}
+
+/* === HEADER BANDS === */
 
 .header-band {
-  /* Desktop default: 1/3 of the viewport height */
   height: calc(100vh / 3); 
   width: 100%; 
   display: flex;
   align-items: center;
-  justify-content: center; /* Mobile-friendly default */
+  justify-content: center;
   overflow: hidden; 
   z-index: 1;
 }
 
-/* Background Colors & Borders (UNCHANGED) */
+/* Background Colors & Borders */
 .header-band:nth-child(1),
 .header-band:nth-child(2), 
 .header-band:nth-child(3) {
-  background-color: rgba(69, 63, 59, 0.4); 
+  background-color: rgba(192, 132, 73, 0); 
+  border-color: rgb(30, 30, 30);
+  border-bottom-width: 2pt;
+}
+
+.dark .header-band:nth-child(1),
+.dark .header-band:nth-child(2), 
+.dark .header-band:nth-child(3) {
+  background-color: rgba(51, 51, 51, 0); 
   border-color: rgb(255, 255, 255);
   border-bottom-width: 2pt;
 }
 
-/* --- TEXT STYLING (Mobile-First Size) --- */
+/* --- TEXT STYLING --- */
 
 .header-text-inner {
   white-space: nowrap;
+  overflow: visible; 
+  display: flex; 
+  /* position: relative; is set via inline style in JSX for burst container targeting */
 }
 
 .header-letter {
   font-family: 'Swearlight', sans-serif;
-  /* MOBILE FONT SIZE: Use a smaller viewport width for the size */
   font-size: 35vw; 
   font-weight: 10;
   line-height: 1;
-  color: rgb(255, 255, 255);
+  color: rgb(30, 30, 30);
   display: inline-block;
+  will-change: transform, opacity;
 }
 
-/* --- MOBILE ALIGNMENT FIXES (Applies to all screens initially) --- */
-/* Set the default to CENTER on mobile */
+.dark .header-letter {
+  color: rgb(255, 255, 255);
+}
+
+.header-band-first {
+    /* Feathered mask effect */
+    mask-image: linear-gradient(
+        to bottom, 
+        rgba(0, 0, 0, 0) 0%, 
+        rgba(0, 0, 0, 1) 15%, 
+        rgba(0, 0, 0, 1) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to bottom, 
+        rgba(0, 0, 0, 0) 0%, 
+        rgba(0, 0, 0, 1) 15%, 
+        rgba(0, 0, 0, 1) 100%
+    );
+}
+
+/* --- MOBILE ALIGNMENT FIXES --- */
 .header-band:nth-child(odd), 
 .header-band:nth-child(even) { 
-    justify-content: center; /* Center all bands on mobile */
+    justify-content: center; 
     padding-left: 0;
     padding-right: 0;
 }
 
 
-/* === HOVER LABEL STYLES (Applies to all screens) === */
+/* === HOVER BURST STYLES === */
 
-.hover-label {
+.burst-container {
     position: absolute;
-    top: 75%;
-    transform: translate(-50%, -100%); 
-    padding: 10px 10px; /* Smaller padding for mobile */
-    background-color: rgba(255, 255, 255, 0.8); 
-    color: black;
-    border: 1px solid black;
-    border-radius: 50px;
-    font-size: 0.7rem; /* Smaller font for mobile */
-    font-weight: 500;
-    pointer-events: none;
+    top: 0; 
+    left: 0; 
+    pointer-events: none; 
+    z-index: 10; 
+    width: 200%; 
+    height: 200%; 
+}
+
+.burst-item {
+    position: absolute;
     white-space: nowrap;
-    z-index: 10;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+    will-change: transform, opacity; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    /* Centers the burst label box around the origin point (defined by Framer Motion's X/Y) */
+    transform: translate(-50%, -100%); 
 }
 
 
@@ -116,12 +170,10 @@ html, body {
 /* =================================================================== */
 @media (min-width: 900px) {
 
-    /* Revert to your larger font size for desktop */
     .header-letter {
       font-size: 20vw; 
     }
     
-    /* Revert to your desired side-alignment for desktop */
     .header-band:nth-child(odd) { 
         justify-content: flex-start;
         padding-left: 5vw;
@@ -132,9 +184,8 @@ html, body {
         padding-right: 5vw;
     }
     
-    /* Revert to larger hover label size */
-    .hover-label {
-        padding: 15px 15px;
-        font-size: 0.8rem;
+    .burst-item {
+        font-size: 16px; 
+        scale: 1.3;
     }
 }

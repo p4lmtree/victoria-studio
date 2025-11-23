@@ -20,7 +20,7 @@
   
 .dark .navbar {
     /* Base dark mode styles (will be blended by Framer Motion on scroll) */
-    color: #ddd;
+    color: #ffffff;
 }
   
 .navbar-title {

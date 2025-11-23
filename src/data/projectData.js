@@ -44,12 +44,41 @@ export const projectData = [
   },
   {
     id: 3,
-    title: "Autour du Ventoux",
-    description: "An exploration of movement and stillness through synchronized lighting and layered projections.",
-    slides: [
-      "/images/placeholder.jpg",
-      "/images/placeholder.jpg"
-    ]
+    title: "Have a Safe Ride",
+    subtitle: "Making tangible social struggles and the frustration of exploitation.",
+    keywords: ["branding", "visual", "motion", "sef-directed"],
+    date: "2025",
+    image:"/images/safe-ride/safe-ride__05.jpg",
+    content: [
+      {
+        type: "intro",
+        value: "Travel agencies are a thing of the past; but with the amount of choice the customer is faced with to plan their holidays, one might easily get lost. Highsky is a data-driven, AI-driven travel planner that tailors holidays that look like you. More thirsting for adventure or more all-inclusive? Highsky plans the perfect holiday for you."
+      },
+      {
+        type: "image",
+        src:  "/images/safe-ride/safe-ride__01.jpg",
+      },
+      {
+        type: "image",
+        src:  "/images/safe-ride/safe-ride__03.jpg",
+      },
+      {
+        type: "image",
+        src:  "/images/safe-ride/safe-ride__04.jpg",
+      },
+            {
+        type: "image",
+        src:  "/images/safe-ride/safe-ride__02.jpg",
+      },
+            {
+        type: "image",
+        src:  "/images/safe-ride/safe-ride__06.jpg",
+      },
+            {
+        type: "image",
+        src:  "/images/safe-ride/safe-ride__07.jpg",
+      },
+      ]
   },
   {
     id: 4,

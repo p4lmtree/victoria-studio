@@ -1,600 +1,378 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import space from "/images/1743874543239679.jpg"; 
+// Removed GSAP imports to rely on dynamic script loading and global access (window.gsap).
 
+// Placeholder data for the media grid (replacing assets/medias/XX.png)
+const MEDIA_ITEMS = Array.from({ length: 12 }, (_, i) => ({
+    id: i + 1,
+    type: `media-${i + 1}`,
+    // Use diverse placeholder images for visual variety
+    placeholderUrl: `https://placehold.co/150x150/${(i * 15 + 69).toString(16)}/ffffff?text=${(i+1)<10 ? '0' : ''}${i+1}`,
+    alt: `Image ${i + 1}`
+}));
 
-// NOTE: Static Firebase imports have been removed to fix the local "Failed to resolve import" error.
-// Firebase modules are now dynamically imported via CDN URLs inside the first useEffect hook below.
+// Placeholder data for placed stickers (optional, but keeps the canvas interactive)
+const INITIAL_PLACED_STICKERS = [
+    { id: 's1', x: 50, y: 50, content: '<img src="https://placehold.co/100x100/f87171/ffffff?text=Hello" class="w-full h-full object-contain pointer-events-none rounded-xl" />' },
+];
 
-// --- STICKER ASSET DEFINITIONS ---
-const STICKER_TEMPLATES = [
-    {
-        type: 'astronaut',
-        width: 80,
-        height: 80,
-        content: `
-            <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C13.88 4 15.68 4.67 17.07 5.83C18.46 6.99 19.4 8.57 19.78 10.37L17.75 11.58C17.43 10.03 16.51 8.71 15.22 7.82C13.93 6.93 12.4 6.5 10.82 6.5C9.24 6.5 7.71 6.93 6.42 7.82C5.13 8.71 4.21 10.03 3.89 11.58L1.86 10.37C2.24 8.57 3.18 6.99 4.57 5.83C5.96 4.67 7.76 4 9.64 4L12 4ZM10 18.5C10 17.67 9.33 17 8.5 17C7.67 17 7 17.67 7 18.5V19.5H17V18.5C17 17.67 16.33 17 15.5 17C14.67 17 14 17.67 14 18.5V19.5H10V18.5Z" fill="currentColor"/>
-            </svg>
-        `,
-        paletteBg: 'bg-sky-100 hover:bg-sky-200',
-        stickerBg: 'bg-sky-200/80',
-        color: 'text-blue-600',
-    },
-    {
-        type: 'planet',
-        width: 90,
-        height: 90,
-        content: `
-            <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                <path d="M4 14C7.33333 15.3333 11.3333 16 15 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M3 10C6.33333 8.66667 10.3333 8 14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-        `,
-        paletteBg: 'bg-fuchsia-100 hover:bg-fuchsia-200',
-        stickerBg: 'bg-fuchsia-200/80',
-        color: 'text-purple-600',
-    },
-    {
-        type: 'custom_png',
-        width: 120,
-        height: 120,
-        content: '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAASUlEQVR42u3BAQEAAACTKPYzLq4pWwAAAAAAAAAAAAAAAAAAAAAAAAAAYAEAAAEAAAAAAAAYAAABAAAAAAAAGAAAAQAAAAAAABgAAAEAAAAAAGAAAAAAMl2+0AEnF/9XqAAAAAElFTkSuQmCC" alt="Custom PNG Sticker" class="w-full h-full object-contain pointer-events-none" />',
-        paletteBg: 'bg-amber-100 hover:bg-amber-200',
-        stickerBg: 'bg-transparent',
-        color: 'text-gray-900',
+/**
+ * Utility function to dynamically load GSAP libraries via CDN.
+ * This is necessary because this environment doesn't automatically load CDNs 
+ * referenced in a React component's file.
+ */
+const loadGSAPScripts = (callback) => {
+    // Check if GSAP is already loaded globally
+    if (window.gsap && window.InertiaPlugin && window.Draggable) {
+        callback();
+        return;
     }
-];
 
-// --- BACKGROUND IMAGE DEFINITIONS ---
-const BACKGROUND_TEMPLATES = [
-    { id: 'space', src: 'images/1743874543239679.jpg', name: 'Deep Space' },
-    { id: 'desert', url: 'https://placehold.co/800x600/d97706/fcd34d?text=Desert+Sunset', name: 'Desert Sunset' },
-    { id: 'forest', url: 'https://placehold.co/800x600/064e3b/a7f3d0?text=Alien+Forest', name: 'Alien Forest' },
-    { id: 'abstract', url: 'https://placehold.co/800x600/3b0764/e9d5ff?text=Abstract+Warp', name: 'Abstract Warp' },
-];
-// --- END ASSET DEFINITIONS ---
+    const scriptsToLoad = [
+        // GSAP Core
+        "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+        // GSAP Plugins required for the effects
+        "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/InertiaPlugin.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js" 
+    ];
 
+    let loadedCount = 0;
+    const totalScripts = scriptsToLoad.length;
 
-// Helper function to generate unique IDs
-const generateId = () => Math.random().toString(36).substring(2, 9);
-
-// Custom Modal Component (Replaces window.confirm/alert)
-const Modal = ({ isOpen, title, message, onConfirm, onCancel }) => {
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
-            <div className="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full transition transform duration-300 scale-100">
-                <h3 className="text-xl font-bold mb-3 text-gray-800">{title}</h3>
-                <p className="text-gray-700 mb-6">{message}</p>
-                <div className="flex justify-end gap-3">
-                    {onCancel && (
-                        <button
-                            onClick={onCancel}
-                            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
-                        >
-                            Cancel
-                        </button>
-                    )}
-                    {onConfirm && (
-                        <button
-                            onClick={onConfirm}
-                            className="px-4 py-2 bg-red-500 text-white font-medium rounded-lg shadow-md hover:bg-red-600 transition"
-                        >
-                            Delete
-                        </button>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
+    scriptsToLoad.forEach(src => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => {
+            loadedCount++;
+            if (loadedCount === totalScripts) {
+                // All scripts loaded, execute callback
+                callback();
+            }
+        };
+        script.onerror = () => {
+            console.error(`Failed to load script: ${src}`);
+        };
+        document.head.appendChild(script);
+    });
 };
 
 
-// Main Application Component (Playground)
 const Playground = () => { 
-    // Postcard Content State
-    const [stickers, setStickers] = useState([]);
-    const [backgroundTemplate, setBackgroundTemplate] = useState(BACKGROUND_TEMPLATES[0]);
-
-    // Dragging State
-    const [activeStickerId, setActiveStickerId] = useState(null);
-    const [isDragging, setIsDragging] = useState(false);
-    const [isDraggingFromPalette, setIsDraggingFromPalette] = useState(false);
-    const [ghostSticker, setGhostSticker] = useState(null);
-    
-    // UI State
-    const [isSaving, setIsSaving] = useState(false);
-    const [message, setMessage] = useState({ text: '', type: '' });
-    const [modal, setModal] = useState({ 
-        isOpen: false, 
-        idToDelete: null,
-        title: '',
-        message: '',
-    });
-
-    // Firebase State
-    const firebaseModules = useRef({});
-    const [db, setDb] = useState(null);
-    const [auth, setAuth] = useState(null);
-    const [userId, setUserId] = useState(null);
-    const [isAuthReady, setIsAuthReady] = useState(false);
-
-    // Refs to hold DOM elements and transient drag data
+    // Refs for the GSAP elements
+    const rootRef = useRef(null);
+    const mediaContainerRef = useRef(null);
     const canvasRef = useRef(null);
-    const dragOffset = useRef({ x: 0, y: 0 });
+    
+    // Simple state for draggable stickers on the canvas
+    const [placedStickers, setPlacedStickers] = useState(INITIAL_PLACED_STICKERS);
+    const [isGSAPReady, setIsGSAPReady] = useState(false);
 
-    const stickerBeingDragged = stickers.find(s => s.id === activeStickerId) || ghostSticker;
+    // --- Placeholder Drag-to-Move Logic for Placed Stickers (RE-ENABLED) ---
+    const handleStickerDrag = useCallback((e, id) => {
+        const sticker = canvasRef.current.querySelector(`#${id}`);
+        if (!sticker) return;
 
-    // Function to show transient messages (success/error)
-    const showMessage = (text, type = 'success') => {
-        setMessage({ text, type });
-        setTimeout(() => setMessage({ text: '', type: '' }), 3000);
-    };
-
-    // --- FIREBASE INITIALIZATION AND AUTH (Updated for dynamic CDN imports) ---
-    useEffect(() => {
-        const loadFirebase = async () => {
-            try {
-                // Dynamic imports from CDN URLs
-                const [appModule, authModule, firestoreModule] = await Promise.all([
-                    import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"),
-                    import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"),
-                    import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js")
-                ]);
-                
-                // Store module functions for later use
-                firebaseModules.current = {
-                    ...firestoreModule, // getFirestore, collection, addDoc, serverTimestamp
-                    ...authModule,      // getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged
-                    ...appModule        // initializeApp
-                };
-
-                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-                if (Object.keys(firebaseConfig).length === 0) {
-                    console.error("Firebase config is missing.");
-                    return;
-                }
-
-                const app = firebaseModules.current.initializeApp(firebaseConfig);
-                const firestore = firebaseModules.current.getFirestore(app);
-                const currentAuth = firebaseModules.current.getAuth(app);
-                
-                setDb(firestore);
-                setAuth(currentAuth);
-
-                firebaseModules.current.onAuthStateChanged(currentAuth, (user) => {
-                    if (user) {
-                        setUserId(user.uid);
-                    } else {
-                         // Fallback for when the token check is complete and no user is found
-                         setUserId('anonymous-user');
-                    }
-                    setIsAuthReady(true);
-                });
-
-                // Handle Authentication
-                const authenticate = async () => {
-                    try {
-                        if (initialAuthToken) {
-                            await firebaseModules.current.signInWithCustomToken(currentAuth, initialAuthToken);
-                        } else {
-                            await firebaseModules.current.signInAnonymously(currentAuth);
-                        }
-                    } catch (e) {
-                        console.error("Authentication failed, signing in anonymously:", e);
-                        await firebaseModules.current.signInAnonymously(currentAuth);
-                    }
-                };
-                
-                // This ensures we attempt auth immediately
-                authenticate(); 
-
-            } catch (error) {
-                console.error("Firebase initialization failed:", error);
-            }
-        };
-
-        loadFirebase();
-    }, []);
-
-    // --- FIRESTORE SAVE LOGIC ---
-    const savePostcard = async () => {
-        const { collection, addDoc, serverTimestamp } = firebaseModules.current;
+        // Use global references
+        const g = window.gsap;
+        const Draggable = window.Draggable;
         
-        if (!isAuthReady || !db || stickers.length === 0 || !userId || !collection) {
-            showMessage("Cannot save: Not authenticated, or no stickers placed.", 'error');
+        if (!g || !Draggable) {
+            console.warn("GSAP Draggable plugin not available to enable drag-to-move.");
             return;
         }
 
-        setIsSaving(true);
-        try {
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-            
-            // Collection path for public data: /artifacts/{appId}/public/data/postcards
-            const postcardsCollection = collection(db, `artifacts/${appId}/public/data/postcards`);
-            
-            // Prepare data: only store necessary properties, excluding SVG content for smaller documents
-            const stickerData = stickers.map(s => ({
-                id: s.id,
-                x: s.x,
-                y: s.y,
-                type: s.type,
-                width: s.template.width,
-                height: s.template.height,
-                stickerBg: s.template.stickerBg,
-            }));
+        // We register Draggable in the main useEffect, but ensure it's available here too.
+        
+        // Use Draggable.create to enable drag-and-drop on the placed sticker
+        const stickerDraggable = Draggable.create(sticker, {
+            bounds: canvasRef.current,
+            onDragStart: function() {
+                g.to(this.target, { scale: 1.1, zIndex: 100, duration: 0.1 });
+            },
+            onDragEnd: function() {
+                g.to(this.target, { scale: 1.0, zIndex: 1, duration: 0.1 });
+            }
+        });
+        
+        // If the click/touch event triggered the handler, start the drag immediately
+        if (stickerDraggable.length > 0) {
+            // Need a slight timeout to ensure Draggable fully initializes before starting the drag
+            setTimeout(() => stickerDraggable[0].startDrag(e), 0);
+        }
+    }, []);
 
-            await addDoc(postcardsCollection, {
-                userId: userId,
-                backgroundImageUrl: backgroundTemplate.url, // Save the selected image URL
-                stickers: JSON.stringify(stickerData), // Serialize to handle complex object arrays safely
-                createdAt: serverTimestamp(),
+    // --- GSAP and Mouse Tracking Logic (Updated to wait for scripts) ---
+    useEffect(() => {
+        // Step 1: Load external scripts first
+        loadGSAPScripts(() => {
+            setIsGSAPReady(true);
+        });
+    }, []); 
+
+    // Step 2: Run the core GSAP logic ONLY when scripts are ready
+    useEffect(() => {
+        if (!isGSAPReady) return; // Wait until scripts are loaded
+
+        const g = window.gsap;
+        const ip = window.InertiaPlugin;
+        
+        // Plugins are already registered inside loadGSAPScripts, but we register again for safety
+        g.registerPlugin(ip, window.Draggable);
+
+        const root = rootRef.current;
+        const mediaElements = mediaContainerRef.current?.querySelectorAll('.media');
+
+        if (!root || !mediaElements || mediaElements.length === 0) return;
+
+        let oldX = 0, oldY = 0;
+        let deltaX = 0, deltaY = 0;
+        let isGSAPActive = false; // Flag to control GSAP listeners
+
+        // 1. Mouse/Touch Tracking: Calculate movement delta
+        const updateDelta = (e) => {
+            // Check for touches array for touch events
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            deltaX = clientX - oldX;
+            deltaY = clientY - oldY;
+
+            oldX = clientX;
+            oldY = clientY;
+        };
+
+        const handleMove = (e) => {
+            if (isGSAPActive) {
+                updateDelta(e);
+            }
+        };
+
+        const handleTouchStart = (e) => {
+            isGSAPActive = true;
+            updateDelta(e); // Initialize oldX/oldY
+        };
+
+        const handleTouchEnd = () => {
+            // Give a moment for the inertia to play out before disabling tracking
+            setTimeout(() => { isGSAPActive = false; }, 300);
+        };
+
+        // Attach global move listeners
+        window.addEventListener("mousemove", handleMove);
+        window.addEventListener("touchmove", handleMove, { passive: true });
+        window.addEventListener("touchstart", handleTouchStart, { passive: true });
+        window.addEventListener("touchend", handleTouchEnd);
+
+
+        // 2. Animation Application
+        const applyAnimation = (el) => {
+            const image = el.querySelector('img');
+            
+            // Check for significant delta to prevent spurious animations
+            if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) return;
+
+            const tl = g.timeline({ // Use global GSAP reference (g)
+                onComplete: () => tl.kill()
+            });
+            tl.timeScale(1.2); 
+
+            // Tween 1: Inertial movement
+            tl.to(image, {
+                inertia: {
+                    x: { velocity: deltaX * 30, end: 0 },
+                    y: { velocity: deltaY * 30, end: 0 },
+                },
+                duration: 0.6
             });
 
-            showMessage("Postcard saved successfully!", 'success');
-        } catch (e) {
-            console.error("Error adding document: ", e);
-            showMessage("Failed to save postcard. See console for details.", 'error');
-        } finally {
-            setIsSaving(false);
-        }
-    };
-
-
-    // --- DRAG HANDLERS ---
-    const getPos = useCallback((e) => {
-        if (e.touches) {
-            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        }
-        return { x: e.clientX, y: e.clientY };
-    }, []);
-
-    const handleCanvasDragStart = useCallback((e, id) => {
-        if (e.button !== 0 && !e.touches) return;
-
-        const stickerElement = e.currentTarget;
-        const stickerRect = stickerElement.getBoundingClientRect();
-        const canvasRect = canvasRef.current.getBoundingClientRect();
-        const pos = getPos(e);
-
-        dragOffset.current = {
-            x: pos.x - stickerRect.left,
-            y: pos.y - stickerRect.top,
-            canvasLeft: canvasRect.left,
-            canvasTop: canvasRect.top,
-            stickerWidth: stickerRect.width,
-            stickerHeight: stickerRect.height,
+            // Tween 2: Random rotation
+            tl.fromTo(image, { rotate: 0 }, {
+                duration: 0.4,
+                rotate: (Math.random() - 0.5) * 30, 
+                yoyo: true,
+                repeat: 1,
+                ease: 'power1.inOut'
+            }, '<'); 
         };
 
-        setActiveStickerId(id);
-        setIsDragging(true);
-        if (e.touches) { e.preventDefault(); }
-    }, [getPos]);
-
-    const handlePaletteDragStart = useCallback((e, template) => {
-        if (e.button !== 0 && !e.touches) return;
-        if (!canvasRef.current) return;
-
-        const pos = getPos(e);
-        const canvasRect = canvasRef.current.getBoundingClientRect();
-
-        setGhostSticker({
-            id: generateId(),
-            type: template.type,
-            template: template,
-            x: pos.x - canvasRect.left - template.width / 2, 
-            y: pos.y - canvasRect.top - template.height / 2,
-        });
-
-        dragOffset.current = {
-            x: template.width / 2,
-            y: template.height / 2,
-            canvasLeft: canvasRect.left,
-            canvasTop: canvasRect.top,
-            stickerWidth: template.width,
-            stickerHeight: template.height,
-        };
-        
-        setIsDraggingFromPalette(true);
-        if (e.touches) { e.preventDefault(); }
-    }, [getPos]);
+        // Attach listeners to each media item using GSAP context for cleanup
+        const ctx = g.context(() => { // Use global GSAP reference (g)
+            mediaElements.forEach(el => {
+                // Activate animation on hover (mouse) and click (touch/general)
+                el.addEventListener('mouseenter', () => { isGSAPActive = true; applyAnimation(el); });
+                el.addEventListener('mouseleave', () => { isGSAPActive = false; });
+                el.addEventListener('click', () => { applyAnimation(el); });
+            });
+        }, root);
 
 
-    const handleDragMove = useCallback((e) => {
-        if (!isDragging && !isDraggingFromPalette) return;
-        
-        const currentSticker = stickerBeingDragged;
-        if (!currentSticker || !canvasRef.current) return;
-
-        const pos = getPos(e);
-        const { x, y, canvasLeft, canvasTop, stickerWidth, stickerHeight } = dragOffset.current;
-        const canvasRect = canvasRef.current.getBoundingClientRect(); 
-
-        let newX = pos.x - canvasLeft - x;
-        let newY = pos.y - canvasTop - y;
-
-        // Boundary checks 
-        newX = Math.max(0, newX);
-        newX = Math.min(canvasRect.width - stickerWidth, newX);
-        newY = Math.max(0, newY);
-        newY = Math.min(canvasRect.height - stickerHeight, newY);
-        
-        if (isDragging) {
-            setStickers(prev => prev.map(s => 
-                s.id === activeStickerId ? { ...s, x: newX, y: newY } : s
-            ));
-        } else if (isDraggingFromPalette) {
-            setGhostSticker(prev => prev ? { ...prev, x: newX, y: newY } : null);
-        }
-        
-        if (e.touches) {
-            e.preventDefault();
-        }
-
-    }, [isDragging, isDraggingFromPalette, activeStickerId, stickerBeingDragged, getPos]);
-
-
-    const handleDragEnd = useCallback(() => {
-        if (!isDragging && !isDraggingFromPalette) return;
-        
-        if (isDraggingFromPalette && ghostSticker) {
-            setStickers(prev => [...prev, ghostSticker]);
-        }
-
-        setIsDragging(false);
-        setActiveStickerId(null);
-        setGhostSticker(null);
-        setIsDraggingFromPalette(false);
-    }, [isDragging, isDraggingFromPalette, ghostSticker]);
-
-
-    const showDeleteModal = useCallback((e, id) => {
-        e.preventDefault(); 
-        
-        setModal({
-            isOpen: true,
-            idToDelete: id,
-            title: 'Confirm Deletion',
-            message: 'Are you sure you want to remove this sticker from the postcard? (Right-click/Long-press detected)',
-        });
-    }, []);
-
-    const confirmDelete = useCallback(() => {
-        setStickers(prev => prev.filter(s => s.id !== modal.idToDelete));
-        setModal({ isOpen: false, idToDelete: null, title: '', message: '' });
-        showMessage("Sticker deleted.", 'error');
-    }, [modal.idToDelete]);
-
-    const cancelDelete = useCallback(() => {
-        setModal({ isOpen: false, idToDelete: null, title: '', message: '' });
-    }, []);
-
-
-    useEffect(() => {
-        if (isDragging || isDraggingFromPalette) {
-            window.addEventListener('mousemove', handleDragMove);
-            window.addEventListener('mouseup', handleDragEnd);
-            window.addEventListener('touchmove', handleDragMove, { passive: false });
-            window.addEventListener('touchend', handleDragEnd);
-        } else {
-            window.removeEventListener('mousemove', handleDragMove);
-            window.removeEventListener('mouseup', handleDragEnd);
-            window.removeEventListener('touchmove', handleDragMove, { passive: false });
-            window.removeEventListener('touchend', handleDragEnd);
-        }
-
+        // Cleanup function
         return () => {
-            window.removeEventListener('mousemove', handleDragMove);
-            window.removeEventListener('mouseup', handleDragEnd);
-            window.removeEventListener('touchmove', handleDragMove, { passive: false });
-            window.removeEventListener('touchend', handleDragEnd);
+            window.removeEventListener("mousemove", handleMove);
+            window.removeEventListener("touchmove", handleMove);
+            window.removeEventListener("touchstart", handleTouchStart);
+            window.removeEventListener("touchend", handleTouchEnd);
+            ctx.revert();
         };
-    }, [isDragging, isDraggingFromPalette, handleDragMove, handleDragEnd]);
-    
+
+    }, [isGSAPReady]); // Re-run when GSAP is confirmed loaded
+
     // --- Render Components ---
-
-    const Sticker = React.memo(({ sticker, isGhost = false }) => {
-        const { id, x, y, template } = sticker;
-        const isActive = activeStickerId === id;
-
-        return (
-            <div
-                className={`absolute rounded-xl shadow-md transition-all duration-100 ease-out 
-                            ${template.stickerBg} ${template.color}
-                            ${isActive ? 'z-50 cursor-grabbing shadow-2xl ring-4 ring-fuchsia-500 scale-[1.05]' : 'z-10 cursor-grab hover:shadow-lg'}
-                            ${isGhost ? 'opacity-70 border-2 border-dashed border-gray-500/50 scale-100' : ''}
-                        `}
-                style={{
-                    left: x,
-                    top: y,
-                    width: template.width,
-                    height: template.height,
-                    transform: `translate(0px, 0px)`,
-                    touchAction: 'none',
-                }}
-                onMouseDown={!isGhost ? (e) => handleCanvasDragStart(e, id) : undefined}
-                onTouchStart={!isGhost ? (e) => handleCanvasDragStart(e, id) : undefined}
-                onContextMenu={!isGhost ? (e) => showDeleteModal(e, id) : undefined}
-                dangerouslySetInnerHTML={{ __html: template.content }}
-            />
-        );
-    });
-
     return (
-        <div className="min-h-screen p-4 md:p-8 bg-gray-50 font-inter">
+        <div ref={rootRef} className="mwg_effect000-root min-h-screen bg-[#1a1a1a] font-[Inter]">
             
-            {/* Custom Modal UI */}
-            <Modal 
-                isOpen={modal.isOpen}
-                title={modal.title}
-                message={modal.message}
-                onConfirm={confirmDelete}
-                onCancel={cancelDelete}
-            />
-
-            {/* Internal CSS block */}
-            <style>{`
-                .postcard-canvas {
-                    min-height: 550px;
-                    border: 2px solid #fff2e8ff;
-                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            {/* Custom CSS (Translated from the user's provided block) */}
+            <style jsx="true">{`
+                /* Essential styles that are hard to replicate with Tailwind alone (e.g., vw units) */
+                .mwg_effect000-root {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding-bottom: 2rem;
                 }
-                .bg-thumbnail {
-                    background-size: cover;
-                    background-position: center;
+                .mwg_effect000 .header {
+                    /* Inherited user CSS */
+                    display: grid;
+                    grid-template-columns: 1fr auto 1fr;
+                    align-items: center;
+                    position: sticky; /* Use sticky instead of absolute top 0 for better React flow */
+                    top: 0;
+                    width: 100%;
+                    border-bottom: 1px solid #323232;
+                    padding: 20px 25px;
+                    color: #BAB8B9;
+                    z-index: 10;
+                    background-color: #1a1a1a;
+                }
+                .mwg_effect000 .header div:nth-child(2) { font-size: 26px; }
+                .mwg_effect000 .header div:last-child { display: flex; justify-content: flex-end; }
+                .mwg_effect000 .button {
+                    font-size: 14px; text-transform: uppercase; border-radius: 24px;
+                    height: 48px; gap: 5px; padding: 0 20px; display: flex; 
+                    align-items: center; width: max-content; cursor: pointer;
+                    transition: opacity 0.2s;
+                }
+                .mwg_effect000 .button1 { background-color: #232323; }
+                .mwg_effect000 .button2 { border: 1px solid #323232; }
+
+                /* Media Grid Specifics */
+                .mwg_effect000 .medias {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1vw;
+                    margin-top: 2rem;
+                    width: 90vw; /* Keep it fluid */
+                    max-width: 1000px; /* Optional max-width */
+                }
+                .mwg_effect000 .medias img {
+                    width: 11vw;
+                    height: 11vw;
+                    object-fit: cover;
+                    border-radius: 4%;
+                    display: block;
+                    pointer-events: none;
+                    will-change: transform; /* Critical for smooth GSAP animation */
+                    background-color: #333;
+                }
+                
+                /* Postcard Canvas Styling */
+                .postcard-canvas {
+                    width: 90vw;
+                    max-width: 800px;
+                    min-height: 500px;
+                    background-color: #f7f7f7;
+                    border: 10px solid #fff;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                    border-radius: 12px;
+                    margin-top: 80px; /* Space below fixed header */
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                @media (max-width: 768px) {
+                    .mwg_effect000 .header { padding: 15px; display: flex; justify-content: space-between; }
+                    .mwg_effect000 .header div:nth-child(2) { display: none; }
+                    .mwg_effect000 .header div:nth-child(1) span { display: none; }
+                    .mwg_effect000 .button { padding: 0 15px; height: 40px; }
+                    .mwg_effect000 .medias {
+                        gap: 2vw;
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                    .mwg_effect000 .medias img {
+                        width: 28vw;
+                        height: 28vw;
+                    }
+                    .postcard-canvas {
+                        min-height: 350px;
+                    }
                 }
             `}</style>
-            
-            {/* Prominent Back Navigation Bar */}
-            <nav className="mb-6">
+
+            {/* Top Navigation */}
+            <div className="w-full max-w-4xl p-4 flex justify-between items-center">
                 <Link 
                     to="/" 
-                    className="
-                        inline-flex items-center 
-                        text-xl font-bold text-gray-700 hover:text-gray-900 
-                        transition-colors duration-200 
-                        p-2 -ml-2 rounded-lg
-                    "
+                    className="inline-flex items-center text-xl font-bold text-gray-500 hover:text-white transition-colors duration-200 p-2 -ml-2 rounded-lg"
                 >
-                    <span className="text-3xl mr-2">←</span> 
-                    Back
+                    <span className="text-3xl mr-2">←</span> Back
                 </Link>
-            </nav>
-
-            <header className="mb-8 text-center">
-                <h1 className="text-5xl text-gray-900 mb-2">
-                    <span className="text-gray-900">i thought a postcard could be nice</span>
-                </h1>
-                <p className="text-lg text-gray-600">
-                    -
-                </p>
-            </header>
+            </div>
             
-            <div className="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto">
-                {/* Tools Sidebar */}
-                <div className="lg:w-1/4 p-4 bg-white rounded-xl shadow-lg border border-gray-100 h-fit order-2 lg:order-1">
-                    
-                    {/* Sticker Palette */}
-                    <h3 className="text-xl mb-4 text-gray-800 border-b pb-2">
-                        choose your fighter
-                    </h3>
-                    <div className="flex flex-wrap gap-4 justify-center">
-                        {STICKER_TEMPLATES.map((template) => (
-                            <div
-                                key={template.type}
-                                onMouseDown={(e) => handlePaletteDragStart(e, template)}
-                                onTouchStart={(e) => handlePaletteDragStart(e, template)}
-                                onClick={() => {
-                                    if (isAuthReady) {
-                                        setStickers(prev => [...prev, {
-                                            id: generateId(),
-                                            type: template.type,
-                                            x: 100, y: 100, rotation: 0, template 
-                                        }]);
-                                    } else {
-                                        showMessage("Please wait for authentication to complete.", 'error');
-                                    }
-                                }}
-                                className={`w-20 h-20 p-2 rounded-xl flex items-center justify-center cursor-grab 
-                                            transition duration-150 transform hover:scale-110 shadow-md
-                                            ${template.paletteBg} ${template.color}
-                                        `}
-                            >
-                                <div className="w-full h-full" 
-                                     dangerouslySetInnerHTML={{ __html: template.content }} />
-                            </div>
-                        ))}
+            <h1 className="text-4xl font-extrabold text-white mb-8">Postcard Design Studio</h1>
+
+            {/* 1. POSTCARD CANVAS (Above the grid) */}
+            <div ref={canvasRef} className="postcard-canvas">
+                {placedStickers.map(sticker => (
+                    <div
+                        key={sticker.id}
+                        id={sticker.id}
+                        className="absolute cursor-grab rounded-xl shadow-lg"
+                        style={{ left: sticker.x, top: sticker.y, zIndex: 1 }}
+                        onMouseDown={(e) => handleStickerDrag(e, sticker.id)}
+                        onTouchStart={(e) => handleStickerDrag(e, sticker.id)}
+                        dangerouslySetInnerHTML={{ __html: sticker.content }}
+                    />
+                ))}
+                
+                {placedStickers.length === 0 && (
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-2xl font-semibold select-none">
+                        Drag items onto the canvas here.
                     </div>
-
-                    {/* Background Picker (Now uses Images) */}
-                    <h3 className="text-xl mb-4 mt-6 text-gray-800 border-b pb-2">
-                        where do we go?
-                    </h3>
-                    <div className="flex flex-wrap gap-3 justify-center">
-                        {BACKGROUND_TEMPLATES.map(bg => (
-                            <button
-                                key={bg.id}
-                                onClick={() => setBackgroundTemplate(bg)}
-                                className={`w-16 h-12 rounded-lg border- transition transform hover:scale-105 shadow-md bg-thumbnail
-                                    ${backgroundTemplate.id === bg.id 
-                                        ? 'border-beige-500 ring-2 ring-offset-2 ring-fuchsia-300' 
-                                        : 'border-gray-300 hover:border-beige-400'
-                                    }`}
-                                style={{ backgroundImage: `url(${bg.url})` }}
-                                title={bg.name}
-                            >
-                                <span className="sr-only">{bg.name}</span>
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Save Button */}
-                    <div className="mt-6 border-t pt-4">
-                        <button
-                            onClick={savePostcard}
-                            disabled={!isAuthReady || isSaving || stickers.length === 0}
-                            className={`w-full py-3 rounded-lg text-white font-semibold transition-all shadow-lg
-                                ${!isAuthReady || isSaving || stickers.length === 0
-                                    ? 'bg-gray-400 cursor-not-allowed'
-                                    : 'bg-green-600 hover:bg-green-700 active:scale-[0.98]'
-                                }`}
-                        >
-                            {isSaving ? (
-                                <span className="flex items-center justify-center">
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Saving...
-                                </span>
-                            ) : (
-                                'Save Postcard to Database'
-                            )}
-                        </button>
-                        <p className="text-xs text-gray-500 mt-2 text-center">
-                            User ID: {userId ? userId.substring(0, 8) : 'Authenticating...'}
-                        </p>
-                    </div>
-
-                </div>
-
-                {/* Postcard Canvas */}
-                <div 
-                    ref={canvasRef} 
-                    className="flex-grow postcard-canvas rounded-sm relative overflow-hidden order-1 lg:order-2"
-                    style={{ 
-                        backgroundImage: `url(${backgroundTemplate.url})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                >
-                    {stickers.length === 0 && (
-                        <div className="absolute inset-0 flex items-center justify-center text-white text-xl font-medium select-none pointer-events-none p-4 text-center bg-black/30">
-                            Drag to add. Right-click/long-press to delete!
-                        </div>
-                    )}
-                    
-                    {stickers.map(sticker => (
-                        <Sticker key={sticker.id} sticker={sticker} />
-                    ))}
-                    
-                    {/* Render the ghost sticker during palette drag */}
-                    {ghostSticker && <Sticker sticker={ghostSticker} isGhost={true} />}
-                </div>
+                )}
             </div>
 
-            {/* Status Message */}
-            {message.text && (
-                <div className={`fixed bottom-4 right-4 p-4 rounded-lg shadow-xl text-white transition-opacity duration-300 ${message.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
-                    {message.text}
+            {/* 2. HEADER BAR (Mimicking the GSAP example's top bar) */}
+            <section className="mwg_effect000 w-full max-w-4xl mt-12">
+                <div className="header w-full static md:fixed md:top-0 md:left-0 md:w-full">
+                    <div>
+                        <p className="button button1">
+                            {/* Placeholder for the icon */}
+                            <img src="https://placehold.co/22x22/232323/BAB8B9?text=3D" alt="3D icon"/>
+                            <span>3d & stuff</span>
+                        </p>
+                    </div>
+                    <div>{MEDIA_ITEMS.length} items available in collection</div>
+                    <div>
+                        <p className="button button2">Add more</p>
+                    </div>
                 </div>
-            )}
+
+                {/* 3. MEDIA GRID (The GSAP interactive section) */}
+                <div ref={mediaContainerRef} className="medias">
+                    {MEDIA_ITEMS.map(item => (
+                        <div key={item.id} className="media cursor-pointer rounded-xl">
+                            <img 
+                                src={item.placeholderUrl} 
+                                alt={item.alt}
+                                // Setting explicit width/height ensures layout stability
+                                width="150" 
+                                height="150"
+                                className="w-full h-full"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </section>
         </div>
     );
 };
