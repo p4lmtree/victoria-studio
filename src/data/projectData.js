@@ -29,14 +29,14 @@ export const projectData = [
       },
       {
         type: "text",
-        value: "Closing remarks about the project go here."
+        value: " "
       }
     ]
   },
   {
     id: 2,
     title: "La Memoria del Agua",
-    description: "An exploration of movement and stillness through synchronized lighting and layered projections.",
+    description: "under construction.",
     image:"/images/memoria-1.jpg",
     slides: [
       "/images/memoria-1.jpg"
@@ -79,23 +79,5 @@ export const projectData = [
         src:  "/images/safe-ride/safe-ride__07.jpg",
       },
       ]
-  },
-  {
-    id: 4,
-    title: "Autour du Ventoux",
-    description: "An exploration of movement and stillness through synchronized lighting and layered projections.",
-    slides: [
-      "/images/placeholder.jpg",
-      "/images/placeholder.jpg"
-    ]
-  },
-  {
-    id: 5,
-    title: "Autour du Ventoux",
-    description: "An exploration of movement and stillness through synchronized lighting and layered projections.",
-    slides: [
-      "/images/placeholder.jpg",
-      "/images/placeholder.jpg"
-    ]
   }
 ];

@@ -99,9 +99,7 @@ const About = () => {
         {/* === COLUMN 3: Education and Skills Box (The dark grey box) === */}
         <div className="about-column column-4">
           <div className="education">
-            <p>Master Critical Inquiry Lab,<br />Design Academy Eindhoven (NL)</p>
-            <p>Bachelor of Arts, Design and Medias,<br />Université Paris-Sorbonne (FR)</p>
-            <p>Bachelor of Product Design,<br />ENSAAMA, Olivier de Serres (FR)</p>
+            <p></p>
           </div>
         </div>
         

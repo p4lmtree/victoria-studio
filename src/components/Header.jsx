@@ -10,19 +10,19 @@ const WORD_BURSTS = {
   "Victoria": [
     { content: "CREATIVE", delay: 0.05, startX: 20, offsetX: 40, offsetY: 95, color: "#19221bff", bgColor: "rgba(156, 229, 92, 0.9)" }, 
     { content: "DESIGNER", delay: 0.15, startX: 80, offsetX: 40, offsetY: 115, color: "#b50338ff", bgColor: "rgba(255, 160, 209, 0.85)" }, 
-    { content: "PORTFOLIO", delay: 0.25, startX: 50, offsetX: 80, offsetY: 25, color: "#c75a00ff", bgColor: "rgba(255, 200, 0, 0.9)" }, 
+    { content: "and cool human bean", delay: 0.25, startX: 50, offsetX: 80, offsetY: 25, color: "#c75a00ff", bgColor: "rgba(255, 200, 0, 0.9)" }, 
     { content: "💡", delay: 0.35, startX: 10, offsetX: -20, offsetY: -50, color: "#FFFFFF", bgColor: "transparent" },
   ],
   "Plasteig": [
     { content: "BRANDING", delay: 0.05, startX: 10, offsetX: 5, offsetY: -40, color: "#0243d0ff", bgColor: "rgba(128, 171, 255, 0.8)" },
-    { content: "STORYTELLER", delay: 0.15, startX: 20, offsetX: -95, offsetY: 60, color: "#787051ff", bgColor: "rgba(249, 234, 192, 0.9)" },
+    { content: "STORYTELLING", delay: 0.15, startX: 20, offsetX: -95, offsetY: 60, color: "#787051ff", bgColor: "rgba(249, 234, 192, 0.9)" },
     { content: "STRATEGY", delay: 0.25, startX: 45, offsetX: 60, offsetY: 80, color: "#FFFFFF", bgColor: "rgba(75, 0, 130, 0.7)" },
     { content: "✨", delay: 0.35, startX: 95, offsetX: -10, offsetY: -30, color: "#FFFFFF", bgColor: "transparent" },
   ],
   "Studio": [
     { content: "COLLAB", delay: 0.05, startX: 30, offsetX: -10, offsetY: -45, color: "#000000", bgColor: "rgba(169, 169, 169, 0.8)" },
     { content: "PROJECTS", delay: 0.15, startX: 85, offsetX: 15, offsetY: -65, color: "#FFFFFF", bgColor: "rgba(95, 158, 160, 0.9)" },
-    { content: "LET'S WORK", delay: 0.25, startX: 5, offsetX: -65, offsetY: 45, color: "#000000", bgColor: "rgba(240, 230, 140, 0.8)" },
+    { content: "LET'S WORK!", delay: 0.25, startX: 5, offsetX: -65, offsetY: 45, color: "#000000", bgColor: "rgba(240, 230, 140, 0.8)" },
     { content: "🚀", delay: 0.35, startX: 60, offsetX: 20, offsetY: -55, color: "#FFFFFF", bgColor: "transparent" },
   ],
 };
