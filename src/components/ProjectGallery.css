@@ -1,52 +1,202 @@
-/* ProjectGallery.css - FINAL REVISED RESPONSIVE VERSION */
+/* ProjectGallery.css */
 
 /* =================================================================== */
-/* 1. BASE STYLES (Your Original Desktop Code - Applies to All Screens)*/
+/* BASE STYLES                                                          */
 /* =================================================================== */
-.p {
-    font-family: "Nuckle";
-}
+
+.p { font-family: "Nuckle"; }
 
 .gallery-container {
   display: flex;
   gap: 5px;
   overflow-x: auto;
-  padding: 80px 60px; /* Base padding */
+  padding: 80px 60px;
   scroll-snap-type: x mandatory;
   align-items: flex-end;
   transition: all 0.3s ease;
+  /* Hide scrollbar but keep it functional */
+  scrollbar-width: none;
 }
+.gallery-container::-webkit-scrollbar { display: none; }
 
 .gallery-item-wrapper {
-  flex: 0 0 220px; /* Base item width */
-  transition: flex-basis 0.3s ease, transform 0.3s ease;
+  flex: 0 0 220px;
+  transition: flex-basis 0.4s ease, transform 0.3s ease;
   scroll-snap-align: center;
-  position: relative; 
-  cursor: pointer; 
+  position: relative;
+  cursor: pointer;
 }
 
-.gallery-item-wrapper:hover {
-  transform-origin:bottom left;
+.gallery-item-wrapper:hover,
+.gallery-item-wrapper.is-hovered {
+  transform-origin: bottom left;
   flex-basis: 480px;
   transform: translateY(-4px);
 }
 
+/* ── Card shell ──────────────────────────────────────────────────────── */
+
 .gallery-item {
   width: 80vh;
   height: 50vh;
-  border-radius: 0px;
+  border-radius: 0;
   overflow: hidden;
   display: block;
-  transition: transform 0.3s ease;
   position: relative;
 }
 
-.gallery-item img {
+/* Base image */
+.gallery-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: opacity 0.45s ease;
 }
+
+/* Fade base image out slightly on hover so overlay reads better */
+.gallery-item-wrapper.is-hovered .gallery-img {
+  opacity: 0.15;
+}
+
+/* ── Hover overlay ───────────────────────────────────────────────────── */
+
+.gallery-hover-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+
+  /* Invisible until hover */
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.gallery-item-wrapper.is-hovered .gallery-hover-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Blurred image background */
+.gallery-hover-bg {
+  position: absolute;
+  inset: -20px; /* bleed past edges so blur doesn't show white fringe */
+  background-size: cover;
+  background-position: center;
+  filter: blur(22px) saturate(1.2);
+  transform: scale(1.05); /* prevent blur-edge bleed */
+  z-index: 0;
+}
+
+/* Color wash — uses the extracted dominant color via CSS var */
+.gallery-hover-tint {
+  position: absolute;
+  inset: 0;
+  background-color: var(--tint-color, rgba(30,30,30,0.55));
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+/* Info panel sits above blur + tint */
+.gallery-hover-info {
+  position: relative;
+  z-index: 2;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #ffffff;
+}
+
+/* Year */
+.gallery-hover-year {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  transform: translateY(10px);
+  transition: transform 0.4s ease 0.05s, opacity 0.4s ease 0.05s;
+}
+
+.gallery-item-wrapper.is-hovered .gallery-hover-year {
+  transform: translateY(0);
+  opacity: 0.6;
+}
+
+/* Title */
+.gallery-hover-title {
+  font-family: 'Nuckle', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 100;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: #ffffff;
+  transform: translateY(14px);
+  transition: transform 0.4s ease 0.1s, opacity 0.4s ease 0.1s;
+  opacity: 0;
+}
+
+.gallery-item-wrapper.is-hovered .gallery-hover-title {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Tags */
+.gallery-hover-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  transform: translateY(14px);
+  transition: transform 0.4s ease 0.15s, opacity 0.4s ease 0.15s;
+  opacity: 0;
+}
+
+.gallery-item-wrapper.is-hovered .gallery-hover-tags {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.gallery-hover-tag {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.5);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  color: rgba(255,255,255,0.85);
+}
+
+/* CTA hint */
+.gallery-hover-cta {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-top: 0.5rem;
+  transform: translateY(10px);
+  transition: transform 0.4s ease 0.2s, opacity 0.4s ease 0.2s;
+  opacity: 0;
+}
+
+.gallery-item-wrapper.is-hovered .gallery-hover-cta {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Title row (above card) ─────────────────────────────────────────── */
 
 .project-title {
   opacity: 0;
@@ -61,171 +211,120 @@
   font-weight: 400;
   color: #2a2a2a;
 }
-/* ... (Rest of title/line/button group styles UNCHANGED) ... */
 
-/* Line Styles */
+.dark .project-title { color: #ffffff; }
+
+.gallery-item-wrapper:hover .project-title,
+.gallery-item-wrapper.is-hovered .project-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Line */
 line {
-  border-left: 0.5px solid rgb(17, 17, 17);
-  height: 0px;
+  border-left: 0.5px solid rgb(17,17,17);
+  height: 0;
   position: relative;
   margin-left: -50px;
   top: 0;
-  transition: height .8s ease-in-out;
+  transition: height 0.8s ease-in-out;
   opacity: 0;
   z-index: 0;
 }
-.dark line { border-left: 0.5px solid rgb(255, 255, 255); }
-.gallery-item-wrapper:hover line { opacity: 1; height: 80px; }
+.dark line { border-left: 0.5px solid rgb(255,255,255); }
+.gallery-item-wrapper:hover line,
+.gallery-item-wrapper.is-hovered line { opacity: 1; height: 80px; }
 
+/* ── More info button ───────────────────────────────────────────────── */
 
 .more-info-button {
   position: absolute;
   bottom: 10px;
-  right: 10px; 
-  z-index: 10; 
-  background: transparent; 
+  right: 10px;
+  z-index: 10;
+  background: transparent;
   border: none;
   padding: 0;
-  
-  /* Replicate Tailwind's base classes and transition */
   outline: none;
-  transition: transform 0.3s ease-in-out; 
+  transition: transform 0.3s ease-in-out;
 }
+.more-info-button:hover { transform: rotate(90deg); }
 
-/* 2. Button Hover Interaction (Replicates: group-hover:rotate-90) */
-/* When the button is hovered, rotate the button itself */
-.more-info-button:hover {
-    transform: rotate(90deg);
-}
-
-
-/* 3. Icon Styling (Replicates: stroke-blue-400 fill-none duration-300) */
 .more-info-icon {
-    /* Base Colors & Transitions */
-    stroke: rgb(255, 255, 255); /* Equivalent to Tailwind's blue-400 */
-    fill: none;
-    transition: stroke 0.3s, fill 0.3s;
+  stroke: rgb(255,255,255);
+  fill: none;
+  transition: stroke 0.3s, fill 0.3s;
 }
-
-/* 4. Icon Hover Interaction (Replicates: group-hover:fill-blue-800) */
-/* When the button (parent) is hovered, change the icon's fill color */
-.more-info-button:hover .more-info-icon {
-    fill: rgba(215, 215, 215, 0.865); /* Equivalent to Tailwind's blue-800 */
-}
-
-/* 5. Icon Active Interaction (Replicates: group-active:stroke-blue-200 group-active:fill-blue-600 group-active:duration-0) */
-/* When the button is pressed (active state), change the colors and disable transition */
+.more-info-button:hover .more-info-icon { fill: rgba(215,215,215,0.865); }
 .more-info-button:active .more-info-icon {
-    stroke: rgb(255, 255, 255); /* Equivalent to Tailwind's blue-200 */
-    fill: rgb(215, 215, 215, 0.865); /* Equivalent to Tailwind's blue-600 */
-    transition-duration: 0s; /* Equivalent to Tailwind's group-active:duration-0 */
+  stroke: rgb(255,255,255);
+  fill: rgba(215,215,215,0.865);
+  transition-duration: 0s;
 }
 
-/* Gradient Wrapper (UNCHANGED) */
+/* ── Gradient edge fades ─────────────────────────────────────────────── */
+
 .gallery-wrapper { position: relative; min-height: 50vh; }
+
 .gallery-wrapper::before,
 .gallery-wrapper::after {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 100px; /* Base width */
+  width: 100px;
   z-index: 10;
   pointer-events: none;
 }
-.gallery-wrapper::before { left: 0; background: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0)); }
-.gallery-wrapper::after { right: 0; background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0)); }
-.dark .gallery-wrapper::before { background: linear-gradient(to right, rgb(24, 24, 24), rgba(0,0,0,0)); }
-.dark .gallery-wrapper::after { background: linear-gradient(to left, rgb(24, 24, 24), rgba(0,0,0,0)); }
-
+.gallery-wrapper::before { left: 0;  background: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0)); }
+.gallery-wrapper::after  { right: 0; background: linear-gradient(to left,  rgba(255,255,255,1), rgba(255,255,255,0)); }
+.dark .gallery-wrapper::before { background: linear-gradient(to right, rgb(24,24,24), rgba(0,0,0,0)); }
+.dark .gallery-wrapper::after  { background: linear-gradient(to left,  rgb(24,24,24), rgba(0,0,0,0)); }
 
 /* =================================================================== */
-/* 2. MOBILE/TABLET OVERRIDE (MAX-WIDTH: 768px)                        */
+/* MOBILE (≤ 768px)                                                     */
 /* =================================================================== */
+
 @media (max-width: 768px) {
   .gallery-container {
-    /* Reduce padding significantly */
-    padding: 40px 10px; 
-    /* Slightly reduce the align-items to feel less tall */
-    align-items: center; 
+    padding: 40px 10px;
+    align-items: center;
   }
 
-  .gallery-item-wrapper {
-    /* Reduce the item's minimum size (220px -> 180px) */
-    flex: 0 0 180px; 
-  }
-  
-  /* Reduce the size of the hover expansion */
-  .gallery-item-wrapper:hover {
-    flex-basis: 300px; /* 480px -> 300px */
-  }
+  .gallery-item-wrapper        { flex: 0 0 180px; }
+  .gallery-item-wrapper:hover,
+  .gallery-item-wrapper.is-hovered { flex-basis: 300px; }
 
   .gallery-item {
-    /* Reduce the image size based on viewport height (50vh -> 40vh) */
-    width: 60vh; /* Also reduce width */
-    height: 40vh; 
+    width: 60vh;
+    height: 40vh;
   }
-  
+
   .project-title {
-    /* Reduce title size */
     font-size: 1.2rem;
     padding-bottom: 2vh;
   }
-  
-  /* Reduce the gradient feather width by half */
+
   .gallery-wrapper::before,
   .gallery-wrapper::after {
-    width: 50px; /* 100px -> 50px */
-    opacity: 0.9; /* Subtle reduction in opacity */
+    width: 50px;
+    opacity: 0.9;
   }
 
-  /* Hide the line on mobile, as it takes up vertical space */
-  .gallery-item-wrapper .line {
-      display: none;
+  /* Hide the decorative line on mobile */
+  .gallery-item-wrapper .line { display: none; }
+
+  .more-info-button {
+    right: 70px;
   }
-  
 
-.more-info-button {
-  position: absolute;
-  bottom: 10px;
-  right: 70px; 
-  z-index: 10; 
-  background: transparent; 
-  border: none;
-  padding: 0;
-  
-  /* Replicate Tailwind's base classes and transition */
-  outline: none;
-  transition: transform 0.3s ease-in-out; 
+  /* Slightly smaller info text on mobile */
+  .gallery-hover-title {
+    font-size: 1.1rem;
+  }
+
+  .gallery-hover-info {
+    padding: 1rem;
+    gap: 0.35rem;
+  }
 }
-
-/* 2. Button Hover Interaction (Replicates: group-hover:rotate-90) */
-/* When the button is hovered, rotate the button itself */
-.more-info-button:hover {
-    transform: rotate(90deg);
-}
-
-
-/* 3. Icon Styling (Replicates: stroke-blue-400 fill-none duration-300) */
-.more-info-icon {
-    /* Base Colors & Transitions */
-    stroke: rgb(255, 255, 255); /* Equivalent to Tailwind's blue-400 */
-    fill: none;
-    transition: stroke 0.3s, fill 0.3s;
-}
-
-/* 4. Icon Hover Interaction (Replicates: group-hover:fill-blue-800) */
-/* When the button (parent) is hovered, change the icon's fill color */
-.more-info-button:hover .more-info-icon {
-    fill: rgba(215, 215, 215, 0.865); /* Equivalent to Tailwind's blue-800 */
-}
-
-/* 5. Icon Active Interaction (Replicates: group-active:stroke-blue-200 group-active:fill-blue-600 group-active:duration-0) */
-/* When the button is pressed (active state), change the colors and disable transition */
-.more-info-button:active .more-info-icon {
-    stroke: rgb(255, 255, 255); /* Equivalent to Tailwind's blue-200 */
-    fill: rgb(215, 215, 215, 0.865); /* Equivalent to Tailwind's blue-600 */
-    transition-duration: 0s; /* Equivalent to Tailwind's group-active:duration-0 */
-}
-}
-

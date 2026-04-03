@@ -52,9 +52,9 @@ export const projectData = [
     content: [
       {
         type: "intro",
-        value: "Travel agencies are a thing of the past; but with the amount of choice the customer is faced with to plan their holidays, one might easily get lost. Highsky is a data-driven, AI-driven travel planner that tailors holidays that look like you. More thirsting for adventure or more all-inclusive? Highsky plans the perfect holiday for you."
+        value: "Making tangible social struggles and the frustration of exploitation.",
       },
-      {
+        {
         type: "image",
         src:  "/images/safe-ride/safe-ride__01.jpg",
       },

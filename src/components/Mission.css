@@ -1,4 +1,4 @@
-/* Mission.css — clean editorial hero strip */
+/* Mission.css */
 
 /* =================================================================== */
 /* BASE (mobile-first)                                                  */
@@ -19,14 +19,13 @@
   border-bottom-color: rgb(255, 255, 255);
 }
 
-/* Vertical rule on the left — decorative */
 .mission-rule-left {
   position: absolute;
   top: 0;
   left: 1.5rem;
   width: 1px;
   height: 100%;
-  background-color: rgb(30, 30, 30);
+  background-color: rgba(30, 30, 30, 0);
   opacity: 0.15;
 }
 
@@ -34,7 +33,6 @@
   background-color: rgb(255, 255, 255);
 }
 
-/* Inner layout */
 .mission-inner {
   max-width: 900px;
   margin: 0 auto;
@@ -43,23 +41,20 @@
   gap: 1.5rem;
 }
 
-/* Eyebrow label */
+/* ── Eyebrow ─────────────────────────────────────────────────────── */
+
 .mission-eyebrow {
   font-family: 'Nuckle', sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgb(30, 30, 30);
   opacity: 0.5;
   margin: 0;
 }
 
-.dark .mission-eyebrow {
-  color: rgb(255, 255, 255);
-}
+/* ── Divider ─────────────────────────────────────────────────────── */
 
-/* Divider line */
 .mission-divider {
   height: 2px;
   background-color: rgb(30, 30, 30);
@@ -71,7 +66,8 @@
   background-color: rgb(255, 255, 255);
 }
 
-/* Main statement */
+/* ── Statement ───────────────────────────────────────────────────── */
+
 .mission-statement {
   font-family: 'Nuckle', sans-serif;
   font-size: clamp(2rem, 7vw, 5rem);
@@ -79,65 +75,20 @@
   line-height: 1.05;
   letter-spacing: -0.02em;
   margin: 0;
-  color: rgb(30, 30, 30);
 }
 
-.dark .mission-statement {
-  color: rgb(255, 255, 255);
-}
+/* ── Descriptor ──────────────────────────────────────────────────── */
 
-/* Descriptor */
 .mission-descriptor {
   font-size: clamp(0.95rem, 2vw, 1.1rem);
   line-height: 1.6;
-  color: rgb(30, 30, 30);
   opacity: 0.6;
   margin: 0;
   max-width: 520px;
 }
 
-.dark .mission-descriptor {
-  color: rgb(200, 200, 200);
-}
+/* ── CTA ─────────────────────────────────────────────────────────── */
 
-/* Tags */
-.mission-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.mission-tag {
-  font-family: 'Nuckle', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  border: 1.5px solid rgb(30, 30, 30);
-  padding: 0.3rem 0.75rem;
-  border-radius: 999px;
-  color: rgb(30, 30, 30);
-  transition: background-color 0.2s ease, color 0.2s ease;
-  cursor: default;
-}
-
-.mission-tag:hover {
-  background-color: rgb(30, 30, 30);
-  color: #ffffff;
-}
-
-.dark .mission-tag {
-  border-color: rgb(255, 255, 255);
-  color: rgb(255, 255, 255);
-}
-
-.dark .mission-tag:hover {
-  background-color: rgb(255, 255, 255);
-  color: rgb(30, 30, 30);
-}
-
-/* CTA button */
 .mission-cta {
   display: inline-flex;
   align-items: center;
@@ -148,24 +99,18 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  color: rgb(30, 30, 30);
-  border-bottom: 2px solid rgb(30, 30, 30);
+  color: inherit;
+  border-bottom: 2px solid currentColor;
   padding-bottom: 0.2rem;
   transition: opacity 0.2s ease, gap 0.2s ease;
 }
 
 .mission-cta:hover {
-  opacity: 0.6;
+  opacity: 0.5;
   gap: 1rem;
 }
 
-.dark .mission-cta {
-  color: rgb(255, 255, 255);
-  border-bottom-color: rgb(255, 255, 255);
-}
-
 .mission-cta-arrow {
-  font-size: 1.1rem;
   transition: transform 0.2s ease;
 }
 
@@ -173,27 +118,149 @@
   transform: translateY(3px);
 }
 
-/* =================================================================== */
-/* MARQUEE STRIP at the bottom                                          */
-/* =================================================================== */
+/* ── Services section ────────────────────────────────────────────── */
+
+.mission-services-eyebrow {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.35;
+  margin: 1.5rem 0 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid currentColor;
+  border-bottom-color: rgba(30, 30, 30, 0.15);
+}
+
+.dark .mission-services-eyebrow {
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+.mission-services-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Service row ─────────────────────────────────────────────────── */
+
+.mission-service-item {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 0.6rem 0 0.5rem;
+  cursor: default;
+  /* Dim siblings when another row is hovered — via CSS */
+  transition: opacity 0.25s ease;
+}
+
+/* When the LIST has a hovered child, dim all items... */
+.mission-services-list:has(.is-hovered) .mission-service-item:not(.is-hovered) {
+  opacity: 0.3;
+}
+
+.mission-service-index {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+  width: 1.2rem;
+  /* opacity set by Framer Motion */
+}
+
+/* ── Label wrap (holds both clipped letters and floating chips) ──── */
+
+.mission-service-label-wrap {
+  position: relative;
+  flex: 1;
+  /* Chips float above; we need overflow visible for them */
+  overflow: visible;
+}
+
+/* Clip the sliding letters so they wipe in from below */
+.mission-service-label {
+  display: block;
+  overflow: hidden;        /* ← clips the y:"100%" start position */
+  line-height: 0.9;
+  padding-bottom: 0.1em;  /* reclaim the clipped descender space */
+}
+
+.mission-service-letter {
+  display: inline-block;
+  font-family: 'Nuckle', sans-serif;
+  font-size: clamp(2.2rem, 8vw, 5rem);
+  font-weight: 100;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  will-change: transform, opacity;
+}
+
+/* ── Burst chips ─────────────────────────────────────────────────── */
+
+.mission-chip-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+  /* overflow visible so chips fly above and below */
+  overflow: visible;
+}
+
+.mission-chip {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: "Nuckle";
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  will-change: transform, opacity;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* centres chip on its anchor point */
+  transform: translate(-50%, -100%);
+}
+
+/* ── Row border ──────────────────────────────────────────────────── */
+
+.mission-service-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgba(30, 30, 30, 0.12);
+}
+
+.dark .mission-service-line {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Marquee ─────────────────────────────────────────────────────── */
 
 .mission-marquee {
   margin-top: 4rem;
   overflow: hidden;
-  border-top: 1px solid rgb(30, 30, 30);
-  border-top-color: rgba(30, 30, 30, 0.12);
+  border-top: 1px solid rgba(30, 30, 30, 0.1);
   padding-top: 1.25rem;
 }
 
 .dark .mission-marquee {
-  border-top-color: rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 .mission-marquee-track {
   display: flex;
-  gap: 0;
   width: max-content;
-  animation: marquee-scroll 18s linear infinite;
+  animation: marquee-scroll 22s linear infinite;
 }
 
 .mission-marquee-item {
@@ -202,14 +269,9 @@
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgb(30, 30, 30);
   opacity: 0.3;
   white-space: nowrap;
   padding: 0 1.5rem;
-}
-
-.dark .mission-marquee-item {
-  color: rgb(255, 255, 255);
 }
 
 .mission-marquee-dot {
@@ -218,7 +280,7 @@
 
 @keyframes marquee-scroll {
   from { transform: translateX(0); }
-  to { transform: translateX(-33.333%); }
+  to   { transform: translateX(-33.333%); }
 }
 
 /* =================================================================== */
@@ -236,6 +298,10 @@
 
   .mission-inner {
     gap: 2rem;
+  }
+
+  .mission-chip {
+    font-size: 13px;
   }
 
   .mission-marquee {

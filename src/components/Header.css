@@ -1,4 +1,4 @@
-/* Header.css — mobile-first, desktop enhanced */
+/* Header.css — tight vertical rhythm edition */
 
 html, body {
   margin: 0;
@@ -8,11 +8,11 @@ html, body {
 }
 
 /* =================================================================== */
-/* 1. BASE / MOBILE STYLES                                             */
+/* 1. BASE / MOBILE                                                     */
 /* =================================================================== */
 
 .header-container {
-  height: 250vh; /* slightly taller on mobile for scroll room */
+  height: 250vh;
   position: relative;
   background-color: #ffffff;
 }
@@ -32,7 +32,7 @@ html, body {
   overflow: hidden;
 }
 
-/* ── Background video ──────────────────────────────────────────────── */
+/* ── Background ──────────────────────────────────────────────────────── */
 
 .background-blur-fixed {
   position: fixed;
@@ -53,31 +53,36 @@ html, body {
   left: 0;
 }
 
-/* ── Header bands ──────────────────────────────────────────────────── */
+/* ── Bands ───────────────────────────────────────────────────────────── */
 
 .header-band {
-  /* Each band is exactly 1/3 of the viewport height */
   height: calc(100vh / 3);
   width: 100%;
   display: flex;
-  align-items: center;
-  /* Mobile: alternate left/right alignment for visual rhythm */
+  /*
+    KEY FIX: anchor text to the bottom of each band.
+    Letters sit on the border line rather than floating
+    in the middle of empty space.
+  */
+  align-items: flex-end;
   overflow: hidden;
   z-index: 1;
-  /* Default mobile alignment — will be overridden per-child below */
-  justify-content: flex-start;
-  padding-left: 4vw;
   box-sizing: border-box;
+
+  /* Mobile: alternate sides for visual rhythm */
+  justify-content: flex-start;
+  padding-left: 3vw;
+  /* Small nudge so baseline doesn't kiss the border */
+  padding-bottom: 0.6vh;
 }
 
-/* Alternate alignment on mobile so it mirrors the desktop stagger */
 .header-band:nth-child(even) {
   justify-content: flex-end;
   padding-left: 0;
-  padding-right: 4vw;
+  padding-right: 3vw;
 }
 
-/* Background & borders */
+/* Borders */
 .header-band:nth-child(1),
 .header-band:nth-child(2),
 .header-band:nth-child(3) {
@@ -91,30 +96,35 @@ html, body {
   border-color: rgb(255, 255, 255);
 }
 
-/* ── Text ──────────────────────────────────────────────────────────── */
+/* ── Text ────────────────────────────────────────────────────────────── */
 
 .header-text-inner {
   white-space: nowrap;
+  /*
+    KEY FIX: visible overflow lets tall ascenders bleed upward
+    past the band edge — looks editorial and intentional.
+  */
   overflow: visible;
   display: flex;
-  /* position: relative set inline in JSX for burst targeting */
+  /* All letters share the same baseline */
+  align-items: flex-end;
 }
 
 .header-letter {
   font-family: 'Nuckle', sans-serif;
   /*
-    Mobile: fill ~90% of the band height (band = 33vh).
-    clamp(min, preferred, max):
-      - min  = 8rem  — never too small on tiny phones
-      - pref = 28vw  — scales nicely with width on most phones
-      - max  = 20vw  — capped until desktop breakpoint takes over
+    KEY FIX: line-height 0.82 strips the font's built-in
+    internal leading. The cap-height now fills the band
+    tightly instead of sitting in a padded box.
   */
-  font-size: clamp(5rem, 28vw, 20vw);
+  line-height: 0.82;
   font-weight: 100;
-  line-height: 1;
   color: rgb(30, 30, 30);
   display: inline-block;
   will-change: transform, opacity;
+
+  /* Mobile — fills ~85% of each band */
+  font-size: clamp(5rem, 28vw, 20vw);
 }
 
 .dark .header-letter {
@@ -126,18 +136,18 @@ html, body {
   mask-image: linear-gradient(
     to bottom,
     rgba(0,0,0,0) 0%,
-    rgba(0,0,0,1) 18%,
+    rgba(0,0,0,1) 20%,
     rgba(0,0,0,1) 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0,0,0,0) 0%,
-    rgba(0,0,0,1) 18%,
+    rgba(0,0,0,1) 20%,
     rgba(0,0,0,1) 100%
   );
 }
 
-/* ── Burst container ───────────────────────────────────────────────── */
+/* ── Burst ───────────────────────────────────────────────────────────── */
 
 .burst-container {
   position: absolute;
@@ -145,10 +155,6 @@ html, body {
   left: 0;
   pointer-events: none;
   z-index: 10;
-  /*
-    On mobile keep the burst container tighter so chips don't escape
-    off-screen. Desktop overrides this back to 200%.
-  */
   width: 150%;
   height: 150%;
 }
@@ -156,9 +162,8 @@ html, body {
 .burst-item {
   position: absolute;
   white-space: nowrap;
-  /* Slightly smaller on mobile so chips fit */
   font-size: 11px;
-  font-weight: 600;
+  font-family: "Nuckle";
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 3px 7px;
@@ -169,7 +174,7 @@ html, body {
 }
 
 /* =================================================================== */
-/* 2. DESKTOP OVERRIDE (≥ 900px)                                       */
+/* 2. DESKTOP (≥ 900px)                                                 */
 /* =================================================================== */
 
 @media (min-width: 900px) {
@@ -178,16 +183,15 @@ html, body {
     height: 200vh;
   }
 
-  /* Restore desktop font size */
   .header-letter {
     font-size: 20vw;
   }
 
-  /* Restore desktop band alignment */
   .header-band {
     padding-left: 0;
     padding-right: 0;
-    justify-content: center; /* reset, then override below */
+    padding-bottom: 0.4vh;
+    justify-content: center;
   }
 
   .header-band:nth-child(odd) {
@@ -200,7 +204,6 @@ html, body {
     padding-right: 5vw;
   }
 
-  /* Restore full burst container */
   .burst-container {
     width: 200%;
     height: 200%;
@@ -213,12 +216,11 @@ html, body {
 }
 
 /* =================================================================== */
-/* 3. VERY SMALL PHONES (≤ 380px) — safety net                        */
+/* 3. TINY PHONES (≤ 380px)                                            */
 /* =================================================================== */
 
 @media (max-width: 380px) {
   .header-letter {
-    /* Pull back slightly so very short names still breathe */
     font-size: clamp(4rem, 24vw, 28vw);
   }
 }

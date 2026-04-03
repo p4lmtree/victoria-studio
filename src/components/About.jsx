@@ -13,24 +13,24 @@ const ABOUT_CONFIG = {
     name: "Victoria Plasteig",
     role: "Creative Designer & Art Director",
     // A punchy 1–2 sentence bio. Keep it human.
-    bio: "I help brands find their visual voice — through strategy, motion, and design that sticks. Based in [City], working globally.",
+    bio: "I help brands find their visual voice — through strategy, identity, and design that sticks. Based in Amsterdam, working globally.",
   },
 
   contact: {
     email: "hello@victoriaplasteig.com", // ✏️ your email
     // Add more lines if you like — each is a { label, value } pair
     extras: [
-      { label: "Available for", value: "Freelance & Collab" },
-      { label: "Based in", value: "Norway / Remote" },
+      { label: "Available for", value: "Enquiries & Collab" },
+      { label: "Based in", value: "NL / Remote" },
     ],
   },
 
   experience: [
     // ✏️ Each entry: { period, role, place }
     // Keep it to 3–4 max, most recent first. No high school. 😄
-    { period: "2022 —", role: "Creative Director", place: "Plasteig Studio" },
-    { period: "2019 — 22", role: "Senior Designer", place: "Studio / Agency name" },
-    { period: "2016 — 19", role: "Designer", place: "Previous place" },
+    { period: "2021 —", role: "Creative Director", place: "Victoria Plasteig Studio" },
+    { period: "2024 —", role: "Creative Designer", place: "Vorm de Stad, Amsterdam" },
+    { period: "2022 — 23", role: "Creative Designer/Strategist", place: "EDHV, Eindhoven" },
   ],
 
   skills: [

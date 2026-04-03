@@ -1,130 +1,252 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import "./Mission.css";
 
-// --- CONFIGURATION ---
-// ✏️ Replace these placeholder strings with your own copy!
+// =================================================================== //
+// ✏️  EDIT THIS — your content                                         //
+// =================================================================== //
 const MISSION_CONFIG = {
-  eyebrow: "Creative Studio", // small label above the main statement
-  statement: "Your mission statement goes here — make it count.", // your big bold line
-  descriptor: "A second sentence that adds nuance or warmth.", // optional supporting line
-  tags: ["Branding", "Strategy", "Motion", "Editorial", "UX/UI", "3D"], // your disciplines
-  cta: "See the work", // button label — scrolls to #projects
-  ctaTarget: "#projects", // scroll target
-};
+ // eyebrow: "Creative Studio",
+  statement: "Hi, I'm Victoria Plasteig, a Netherlands-based designer weaving together brand strategy, identity, and storytelling into visuals that impact people.",
+  descriptor: "Let's work together on your next amazing journey!",
+  cta: "See the work",
+  ctaTarget: "#gallery-wrapper",
 
-// --- ANIMATION VARIANTS ---
-const containerVariants = {
-  hidden: {},
+  // Each service: a label + the burst chips that pop on hover
+  services: [
+    {
+      label: "Branding",
+      chips: [
+        { content: "Identity",        color: "#19221b", bgColor: "rgba(156,229,92,0.92)"  },
+        { content: "Visual Language", color: "#19221b", bgColor: "rgba(200,240,120,0.85)" },
+        { content: "Logo Design",     color: "#fff",    bgColor: "rgba(30,30,30,0.85)"    },
+        { content: "✦",              color: "#c75a00", bgColor: "transparent"             },
+      ],
+    },
+    {
+      label: "Art Direction",
+      chips: [
+        { content: "Editorial",    color: "#fff",    bgColor: "rgba(180,80,180,0.75)"  },
+        { content: "Campaigns",    color: "#0243d0", bgColor: "rgba(200,220,255,0.9)"  },
+        { content: "Photography",  color: "#787051", bgColor: "rgba(249,234,192,0.92)" },
+        { content: "✦",           color: "#fff",    bgColor: "transparent"             },
+      ],
+    },
+    {
+      label: "Strategy",
+      chips: [
+        { content: "Positioning", color: "#b50338", bgColor: "rgba(255,160,209,0.88)" },
+        { content: "Narrative",   color: "#fff",    bgColor: "rgba(95,158,160,0.85)"  },
+        { content: "Research",    color: "#19221b", bgColor: "rgba(240,230,140,0.88)" },
+        { content: "✦",          color: "#c75a00", bgColor: "transparent"             },
+      ],
+    },
+    {
+      label: "Digital & Motion",
+      chips: [
+        { content: "UX/UI",       color: "#fff",    bgColor: "rgba(75,0,130,0.75)"   },
+        { content: "Prototyping", color: "#19221b", bgColor: "rgba(156,229,92,0.85)" },
+        { content: "Animation",   color: "#fff",    bgColor: "rgba(210,70,50,0.8)"   },
+        { content: "✦",          color: "#fff",    bgColor: "transparent"            },
+      ],
+    },
+  ],
+};
+// =================================================================== //
+
+// --- Chip scatter positions (startX % along the label, then offsetX/Y on hover) ---
+const CHIP_POSITIONS = [
+  { startX: 10, offsetX: -25, offsetY: -60 },
+  { startX: 35, offsetX:  15, offsetY: -80 },
+  { startX: 62, offsetX:  55, offsetY: -50 },
+  { startX: 82, offsetX: -15, offsetY: -70 },
+];
+
+// --- Letter-by-letter variant (mirrors Header.jsx exactly) ---
+const letterVariants = {
+  hidden: { y: "100%", opacity: 0 },
   visible: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    y: "0%",
+    opacity: 1,
+    transition: { ease: [0.25, 1, 0.5, 1], duration: 1.0 },
   },
 };
 
+// --- Intro fadeUp ---
 const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: {
+  hidden: { opacity: 0, y: 28 },
+  visible: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { ease: [0.25, 1, 0.5, 1], duration: 0.9 },
-  },
+    transition: { delay: i * 0.1, duration: 0.8, ease: [0.25, 1, 0.5, 1] },
+  }),
 };
 
+// --- Divider line ---
 const lineVariants = {
   hidden: { scaleX: 0, originX: 0 },
   visible: {
     scaleX: 1,
-    transition: { ease: [0.25, 1, 0.5, 1], duration: 1.1, delay: 0.2 },
+    transition: { ease: [0.25, 1, 0.5, 1], duration: 1.1, delay: 0.15 },
   },
 };
 
-const tagVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: 0.5 + i * 0.07, duration: 0.5, ease: "easeOut" },
-  }),
+// --- Single service row ---
+const ServiceRow = ({ service, index, isInView }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const rowDelay = 0.5 + index * 0.15;
+
+  return (
+    <li
+      className={`mission-service-item${isHovered ? " is-hovered" : ""}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Index letter */}
+      <motion.span
+        className="mission-service-index"
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 0.35 } : { opacity: 0 }}
+        transition={{ delay: rowDelay, duration: 0.6 }}
+      >
+        {String.fromCharCode(65 + index)}
+      </motion.span>
+
+      {/* Label area — clips letters + holds burst chips */}
+      <div className="mission-service-label-wrap">
+
+        {/* Burst chips */}
+        <div className="mission-chip-container" aria-hidden="true">
+          {service.chips.map((chip, ci) => {
+            const pos = CHIP_POSITIONS[ci] || CHIP_POSITIONS[0];
+            return (
+              <motion.span
+                key={ci}
+                className="mission-chip"
+                initial={{
+                  opacity: 0,
+                  scale: 0.5,
+                  x: `${pos.startX}%`,
+                  y: 0,
+                  color: chip.color,
+                  backgroundColor: chip.bgColor,
+                }}
+                animate={{
+                  opacity: isHovered ? 1 : 0,
+                  scale: isHovered ? 1 : 0.6,
+                  x: isHovered
+                    ? `calc(${pos.startX}% + ${pos.offsetX}px)`
+                    : `${pos.startX}%`,
+                  y: isHovered ? pos.offsetY : 0,
+                  rotate: isHovered ? (Math.random() * 8 - 4) : 0,
+                  color: chip.color,
+                  backgroundColor: chip.bgColor,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 280,
+                  damping: 22,
+                  delay: isHovered ? ci * 0.06 : 0,
+                }}
+              >
+                {chip.content}
+              </motion.span>
+            );
+          })}
+        </div>
+
+        {/* Letter-by-letter label — overflow hidden clips the slide-up */}
+        <span className="mission-service-label" aria-label={service.label}>
+          {service.label.split("").map((ch, li) => (
+            <motion.span
+              key={li}
+              className="mission-service-letter"
+              variants={letterVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              transition={{
+                ease: [0.25, 1, 0.5, 1],
+                duration: 1.0,
+                delay: rowDelay + li * 0.035,
+              }}
+            >
+              {ch === " " ? "\u00A0" : ch}
+            </motion.span>
+          ))}
+        </span>
+      </div>
+
+      {/* Row border */}
+      <div className="mission-service-line" aria-hidden="true" />
+    </li>
+  );
 };
 
-// --- COMPONENT ---
+// --- Main ---
 export default function Mission() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const isInView = useInView(ref, { once: true, margin: "-8% 0px" });
 
   const handleCta = (e) => {
     e.preventDefault();
-    const target = document.querySelector(MISSION_CONFIG.ctaTarget);
-    if (target) target.scrollIntoView({ behavior: "smooth" });
+    document
+      .querySelector(MISSION_CONFIG.ctaTarget)
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section className="mission-section" ref={ref} aria-label="Mission">
-      {/* Decorative vertical rule */}
       <div className="mission-rule-left" aria-hidden="true" />
 
-      <motion.div
-        className="mission-inner"
-        variants={containerVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-      >
+      <div className="mission-inner">
+
         {/* Eyebrow */}
-        <motion.p className="mission-eyebrow" variants={fadeUp}>
+        <motion.p className="mission-eyebrow" custom={0} variants={fadeUp} initial="hidden" animate={isInView ? "visible" : "hidden"}>
           {MISSION_CONFIG.eyebrow}
         </motion.p>
 
-        {/* Horizontal divider line */}
-        <motion.div className="mission-divider" variants={lineVariants} />
+        {/* Divider */}
+        <motion.div className="mission-divider" variants={lineVariants} initial="hidden" animate={isInView ? "visible" : "hidden"} />
 
-        {/* Main statement */}
-        <motion.h2 className="mission-statement" variants={fadeUp}>
+        {/* Statement */}
+        <motion.h2 className="mission-statement" custom={1} variants={fadeUp} initial="hidden" animate={isInView ? "visible" : "hidden"}>
           {MISSION_CONFIG.statement}
         </motion.h2>
 
         {/* Descriptor */}
-        <motion.p className="mission-descriptor" variants={fadeUp}>
+        <motion.p className="mission-descriptor" custom={2} variants={fadeUp} initial="hidden" animate={isInView ? "visible" : "hidden"}>
           {MISSION_CONFIG.descriptor}
         </motion.p>
 
-        {/* Tags row */}
-        <div className="mission-tags" role="list" aria-label="Disciplines">
-          {MISSION_CONFIG.tags.map((tag, i) => (
-            <motion.span
-              key={tag}
-              className="mission-tag"
-              role="listitem"
-              custom={i}
-              variants={tagVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-            >
-              {tag}
-            </motion.span>
-          ))}
-        </div>
-
         {/* CTA */}
-        <motion.div variants={fadeUp}>
-          <a
-            href={MISSION_CONFIG.ctaTarget}
-            className="mission-cta"
-            onClick={handleCta}
-            aria-label={MISSION_CONFIG.cta}
-          >
+        <motion.div custom={3} variants={fadeUp} initial="hidden" animate={isInView ? "visible" : "hidden"}>
+          <a href={MISSION_CONFIG.ctaTarget} className="mission-cta" onClick={handleCta}>
             <span className="mission-cta-label">{MISSION_CONFIG.cta}</span>
             <span className="mission-cta-arrow" aria-hidden="true">↓</span>
           </a>
         </motion.div>
-      </motion.div>
 
-      {/* Floating marquee strip */}
+        {/* Services eyebrow */}
+        <motion.p className="mission-services-eyebrow" custom={4} variants={fadeUp} initial="hidden" animate={isInView ? "visible" : "hidden"}>
+          That's the stuff I do
+        </motion.p>
+
+        {/* Services list */}
+        <ol className="mission-services-list" aria-label="Services">
+          {MISSION_CONFIG.services.map((service, i) => (
+            <ServiceRow key={service.label} service={service} index={i} isInView={isInView} />
+          ))}
+        </ol>
+
+      </div>
+
+      {/* Marquee */}
       <div className="mission-marquee" aria-hidden="true">
         <div className="mission-marquee-track">
           {[...Array(3)].flatMap(() =>
-            MISSION_CONFIG.tags.map((tag, i) => (
-              <span key={`${tag}-${i}`} className="mission-marquee-item">
-                {tag} <span className="mission-marquee-dot">·</span>
+            MISSION_CONFIG.services.map((s, i) => (
+              <span key={`${s.label}-${i}`} className="mission-marquee-item">
+                {s.label} <span className="mission-marquee-dot">·</span>
               </span>
             ))
           )}
