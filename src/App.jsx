@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Import all local components
 import Header from "./components/Header";
+import Mission from "./components/Mission";
 import About from "./components/About";
 import ProjectGallery from "./components/ProjectGallery";
 import Footer from "./components/Footer";
@@ -30,7 +31,7 @@ const MainPortfolioLayout = () => {
         you might only need one, but keeping both based on your original code.
       */}
       <Header />
-      
+      <Mission /> 
       <div className="content-wrapper">
         <div className="main">
           

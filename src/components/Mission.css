@@ -1,0 +1,244 @@
+/* Mission.css — clean editorial hero strip */
+
+/* =================================================================== */
+/* BASE (mobile-first)                                                  */
+/* =================================================================== */
+
+.mission-section {
+  position: relative;
+  background-color: #ffffff;
+  color: rgb(30, 30, 30);
+  padding: 5rem 1.5rem 4rem;
+  overflow: hidden;
+  border-bottom: 2pt solid rgb(30, 30, 30);
+}
+
+.dark .mission-section {
+  background-color: rgb(30, 30, 30);
+  color: rgb(255, 255, 255);
+  border-bottom-color: rgb(255, 255, 255);
+}
+
+/* Vertical rule on the left — decorative */
+.mission-rule-left {
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  width: 1px;
+  height: 100%;
+  background-color: rgb(30, 30, 30);
+  opacity: 0.15;
+}
+
+.dark .mission-rule-left {
+  background-color: rgb(255, 255, 255);
+}
+
+/* Inner layout */
+.mission-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Eyebrow label */
+.mission-eyebrow {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(30, 30, 30);
+  opacity: 0.5;
+  margin: 0;
+}
+
+.dark .mission-eyebrow {
+  color: rgb(255, 255, 255);
+}
+
+/* Divider line */
+.mission-divider {
+  height: 2px;
+  background-color: rgb(30, 30, 30);
+  width: 100%;
+  transform-origin: left;
+}
+
+.dark .mission-divider {
+  background-color: rgb(255, 255, 255);
+}
+
+/* Main statement */
+.mission-statement {
+  font-family: 'Nuckle', sans-serif;
+  font-size: clamp(2rem, 7vw, 5rem);
+  font-weight: 100;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: rgb(30, 30, 30);
+}
+
+.dark .mission-statement {
+  color: rgb(255, 255, 255);
+}
+
+/* Descriptor */
+.mission-descriptor {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.6;
+  color: rgb(30, 30, 30);
+  opacity: 0.6;
+  margin: 0;
+  max-width: 520px;
+}
+
+.dark .mission-descriptor {
+  color: rgb(200, 200, 200);
+}
+
+/* Tags */
+.mission-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mission-tag {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1.5px solid rgb(30, 30, 30);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  color: rgb(30, 30, 30);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: default;
+}
+
+.mission-tag:hover {
+  background-color: rgb(30, 30, 30);
+  color: #ffffff;
+}
+
+.dark .mission-tag {
+  border-color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
+}
+
+.dark .mission-tag:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(30, 30, 30);
+}
+
+/* CTA button */
+.mission-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgb(30, 30, 30);
+  border-bottom: 2px solid rgb(30, 30, 30);
+  padding-bottom: 0.2rem;
+  transition: opacity 0.2s ease, gap 0.2s ease;
+}
+
+.mission-cta:hover {
+  opacity: 0.6;
+  gap: 1rem;
+}
+
+.dark .mission-cta {
+  color: rgb(255, 255, 255);
+  border-bottom-color: rgb(255, 255, 255);
+}
+
+.mission-cta-arrow {
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.mission-cta:hover .mission-cta-arrow {
+  transform: translateY(3px);
+}
+
+/* =================================================================== */
+/* MARQUEE STRIP at the bottom                                          */
+/* =================================================================== */
+
+.mission-marquee {
+  margin-top: 4rem;
+  overflow: hidden;
+  border-top: 1px solid rgb(30, 30, 30);
+  border-top-color: rgba(30, 30, 30, 0.12);
+  padding-top: 1.25rem;
+}
+
+.dark .mission-marquee {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.mission-marquee-track {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: marquee-scroll 18s linear infinite;
+}
+
+.mission-marquee-item {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(30, 30, 30);
+  opacity: 0.3;
+  white-space: nowrap;
+  padding: 0 1.5rem;
+}
+
+.dark .mission-marquee-item {
+  color: rgb(255, 255, 255);
+}
+
+.mission-marquee-dot {
+  margin-left: 1.5rem;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-33.333%); }
+}
+
+/* =================================================================== */
+/* DESKTOP (≥ 900px)                                                    */
+/* =================================================================== */
+
+@media (min-width: 900px) {
+  .mission-section {
+    padding: 7rem 5vw 5rem;
+  }
+
+  .mission-rule-left {
+    left: 5vw;
+  }
+
+  .mission-inner {
+    gap: 2rem;
+  }
+
+  .mission-marquee {
+    margin-top: 5rem;
+  }
+}

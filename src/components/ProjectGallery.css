@@ -3,6 +3,9 @@
 /* =================================================================== */
 /* 1. BASE STYLES (Your Original Desktop Code - Applies to All Screens)*/
 /* =================================================================== */
+.p {
+    font-family: "Nuckle";
+}
 
 .gallery-container {
   display: flex;
@@ -52,7 +55,7 @@
   display: flex;
   gap: 8px;
   z-index: 5;
-  font-family: "Swearlight";
+  font-family: "Nuckle";
   padding-bottom: 3vh;
   font-size: 1.5rem;
   font-weight: 400;
@@ -225,3 +228,4 @@ line {
     transition-duration: 0s; /* Equivalent to Tailwind's group-active:duration-0 */
 }
 }
+

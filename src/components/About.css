@@ -1,150 +1,304 @@
-/* About.css - FINAL RESPONSIVE VERSION */
+/* About.css — clean structured redesign */
 
 /* =================================================================== */
-/* 1. MOBILE FIRST BASE STYLES (< 992px) - Single Column Stack         */
+/* BASE (mobile-first)                                                  */
 /* =================================================================== */
 
 .about-section {
-  /* Reduced padding for mobile */
-  padding: 4rem 1.5rem; 
-  background: #fafafa00;
-  color: #111;
-  /* Removed gap/flex-wrap - let the grid handle the layout */
+  padding: 5rem 1.5rem 6rem;
+  background: #ffffff;
+  color: rgb(30, 30, 30);
+  border-bottom: 2pt solid rgb(30, 30, 30);
 }
 
-/* Dark mode support */
 .dark .about-section {
-  background: #111;
-  color: #eee;
+  background: rgb(30, 30, 30);
+  color: rgb(255, 255, 255);
+  border-bottom-color: rgb(255, 255, 255);
 }
 
-.about-grid-container {
+/* ── Section header row ─────────────────────────────────────────── */
+
+.about-header-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.about-section-label {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(30, 30, 30);
+  opacity: 0.4;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dark .about-section-label {
+  color: rgb(255, 255, 255);
+}
+
+.about-header-line {
+  flex: 1;
+  height: 1px;
+  background-color: rgb(30, 30, 30);
+  opacity: 0.15;
+}
+
+.dark .about-header-line {
+  background-color: rgb(255, 255, 255);
+}
+
+/* ── Grid ───────────────────────────────────────────────────────── */
+
+.about-grid {
   display: grid;
-  /* MOBILE DEFAULT: Force a single column flow */
-  grid-template-columns: 1fr; 
-  /* Minimal gap between stacked sections */
-  gap: 3rem; 
-  width: 100%;
+  grid-template-columns: 1fr;
+  gap: 3rem;
 }
 
-/* Ensure the stacked columns flow in a logical order on mobile */
-/* H1 -> Intro -> Experience -> Skills -> Education */
-.column-1 { order: 1; } /* Name/Hei! */
-.column-2 { order: 2; } /* Intro/Contact */
-.column-3 { order: 3; } /* Experience/Skills Box */
-.column-4 { order: 4; } /* Education */
-
-
-/* --- Text and Element Styling --- */
-
-p {
-  font-size: 1rem; /* Increase text size for better mobile readability */
-  line-height: 1.5;
+.about-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
+
+/* ── Shared col label ───────────────────────────────────────────── */
+
+.about-col-label {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin: 0 0 0.25rem 0;
+  border-bottom: 1px solid currentColor;
+  border-bottom-color: rgba(30, 30, 30, 0.12);
+  padding-bottom: 0.5rem;
+}
+
+.dark .about-col-label {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Identity column ────────────────────────────────────────────── */
 
 .about-name {
-  /* Smaller clamp size for mobile */
-  font-size: clamp(2.5rem, 10vw, 3rem); 
-  font-weight: 500;
+  font-family: 'Nuckle', sans-serif;
+  font-size: clamp(1.8rem, 6vw, 2.8rem);
+  font-weight: 100;
+  letter-spacing: -0.02em;
   line-height: 1.1;
+  margin: 0;
+  color: rgb(30, 30, 30);
+}
+
+.dark .about-name {
+  color: rgb(255, 255, 255);
+}
+
+.about-role {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.5;
   margin: 0;
 }
 
-/* Clear the default column spacing */
-.about-column {
-  background-color: transparent;
+.about-bio {
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0.5rem 0 0;
+  max-width: 420px;
+  opacity: 0.75;
+}
+
+/* ── Contact column ─────────────────────────────────────────────── */
+
+.about-email {
+  font-family: 'Nuckle', sans-serif;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  font-weight: 300;
+  color: rgb(30, 30, 30);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  align-self: flex-start;
+  transition: opacity 0.2s ease;
+}
+
+.about-email:hover {
+  opacity: 0.5;
+}
+
+.dark .about-email {
+  color: rgb(255, 255, 255);
+}
+
+.about-contact-extras {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.about-contact-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(30, 30, 30, 0.08);
+}
+
+.dark .about-contact-row {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.about-contact-key {
+  opacity: 0.45;
+  letter-spacing: 0.05em;
+}
+
+.about-contact-val {
+  font-weight: 500;
+  text-align: right;
+}
+
+/* ── Experience column ──────────────────────────────────────────── */
+
+.about-exp-list {
+  list-style: none;
+  margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-/* Skills Box: Ensure it has space to breathe in the vertical flow */
-.about-skills-box {
-  background-color: #c3c3c300; 
-  /* Reduced minimum height on mobile */
-  min-height: 250px; 
-  padding: 1.5rem;
-  margin-top: 2rem; 
-}
-.dark .about-skills-box {
-    background-color: #00000000;
+.about-exp-item {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(30, 30, 30, 0.08);
+  font-size: 0.85rem;
 }
 
+.dark .about-exp-item {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
 
-/* --- SKILLS CLOUD STYLES (Keep initial randomization visible) --- */
+.about-exp-period {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  font-size: 0.7rem;
+  opacity: 0.4;
+  letter-spacing: 0.05em;
+  align-self: center;
+}
+
+.about-exp-role {
+  grid-column: 2;
+  grid-row: 1;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.about-exp-place {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+/* ── Skills column ──────────────────────────────────────────────── */
+
+.about-col-skills {
+  /* takes full width on mobile, defined in grid on desktop */
+}
 
 .skill-cloud {
-    position: relative; 
-    /* Set a contained area large enough for skills to scatter */
-    min-height: 200px; 
-    width: 100%;
-    /* On mobile, skills might overlap, but dragging should solve it */
-    overflow: visible;
+  position: relative;
+  min-height: 220px;
+  width: 100%;
+  overflow: visible;
 }
 
 .skill-wrapper {
-    position: absolute; 
-    transform: translate(-50%, -50%); 
-    cursor: grab;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+}
+
+.skill-wrapper:active {
+  cursor: grabbing;
 }
 
 .skill-message {
-    position: absolute;
-    top: -30px; 
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: black;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    pointer-events: none;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(30, 30, 30);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.dark .skill-message {
+  background-color: rgb(255, 255, 255);
+  color: rgb(30, 30, 30);
 }
 
 .skill-svg {
-    display: block; 
-    max-width: 120px; /* Reduced max size for mobile skill shapes */
-    height: auto;
+  display: block;
+  max-width: 110px;
+  height: auto;
 }
 
 /* =================================================================== */
-/* 2. DESKTOP OVERRIDE (>= 992px) - 4 Column Grid                      */
+/* DESKTOP (≥ 992px)                                                    */
 /* =================================================================== */
+
 @media (min-width: 992px) {
   .about-section {
-    padding: 6rem 4rem;
-  }
-  
-  .about-grid-container {
-    /* Revert to the 4 column layout for desktop */
-    grid-template-columns: 1.2fr 1fr 1.5fr 1fr; 
-    gap: 1.5rem; 
-  }
-  
-  /* Reset the order for the intended visual flow */
-  .column-1 { order: 0; }
-  .column-2 { order: 0; }
-  .column-3 { order: 0; }
-  .column-4 { order: 0; }
-  
-  p {
-    font-size: 0.8rem; /* Revert to smaller text size for dense desktop layout */
+    padding: 6rem 5vw 7rem;
   }
 
-  .about-name {
-    font-size: clamp(3rem, 5vw, 4rem); /* Revert to larger font */
+  .about-grid {
+    /* 4 unequal columns: name | contact | experience | skills */
+    grid-template-columns: 1.4fr 1fr 1.2fr 1.4fr;
+    gap: 2rem;
+    align-items: start;
   }
 
-  .about-skills-box {
-      /* Revert to desktop min height */
-      min-height: 200px; 
+  .about-bio {
+    font-size: 0.9rem;
   }
-  
+
   .skill-cloud {
-      /* Revert to desktop min height */
-      min-height: 100px;
+    min-height: 180px;
   }
-  
+
   .skill-svg {
-      max-width: 150px; /* Revert to larger skill shapes */
+    max-width: 130px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .about-grid {
+    gap: 3rem;
   }
 }

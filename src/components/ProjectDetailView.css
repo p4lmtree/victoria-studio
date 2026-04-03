@@ -79,7 +79,7 @@
   font-size: clamp(2.5rem, 10vw, 4rem); 
   line-height: 1;
   margin: 0;
-  font-family: 'Swearlight';
+  font-family: 'Nuckle';
   padding-top: 5%;
   padding-bottom: 5%;
 }
@@ -176,7 +176,7 @@
   
   /* Reintroduce max-width for better reading experience on desktop */
   .intro-block, .text-block {
-      font-size: 1.1rem;
+      font-family: "Nuckle";
   }
 
  p {

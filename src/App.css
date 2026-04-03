@@ -9,7 +9,13 @@
   src: url('./assets/fonts/SwearDisplayDemo-LightCilati.otf') format('opentype');
   font-weight: 400; /* Regular weight */
   font-display: swap; /* Tells the browser how to handle loading (swap is usually best) */
+
+  font-family: 'Nuckle'; /* ⬅️ This is the name you will use in your CSS */
+  src: url('./assets/fonts/Nuckle Trial Regular.otf') format('opentype');
+  font-weight: 400; /* Regular weight */
+  font-display: swap; /* Tells the browser how to handle loading (swap is usually best) */
 }
+
 
 /* Add this at the very top of your App.css */
 html,
