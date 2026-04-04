@@ -21,7 +21,7 @@ const svgstrategy = (props) => (
     */}
     <path 
       d="M291.74,497.54c-77.79,0-150.93-30.29-205.94-85.3C30.79,357.22.5,284.09.5,206.29S30.66,55.68,85.45.71l411.88,411.88c-54.97,54.79-127.96,84.95-205.59,84.95Z"
-      style={{ fill: '#f1d145ff', stroke: '#ffffffff', strokeWidth: 0 }} // Force a visible fill color
+      style={{ fill: '#c8f078d9', stroke: '#ffffffff', strokeWidth: 0 }} // Force a visible fill color
     />
     
     {/* 2. TEXT LABEL 

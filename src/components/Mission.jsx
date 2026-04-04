@@ -8,18 +8,28 @@ import "./Mission.css";
 const MISSION_CONFIG = {
  // eyebrow: "Creative Studio",
   statement: "Hi, I'm Victoria Plasteig, a Netherlands-based designer weaving together brand strategy, identity, and storytelling into visuals that impact people.",
-  descriptor: "Let's work together on your next amazing journey!",
+  // descriptor: "Let's work together on your next amazing journey!",
   cta: "See the work",
   ctaTarget: "#gallery-wrapper",
 
   // Each service: a label + the burst chips that pop on hover
   services: [
+        {
+      label: "Strategy",
+      chips: [
+        { content: "Positioning", color: "#b50338", bgColor: "rgba(255,160,209,0.88)" },
+        { content: "Brand Narrative",   color: "#fff",    bgColor: "rgba(95,158,160,0.85)"  },
+        { content: "Research",    color: "#19221b", bgColor: "rgba(240,230,140,0.88)" },
+        { content: "✦",          color: "#c75a00", bgColor: "transparent"             },
+        { content: "Vision", color: "#19221b", bgColor: "rgba(200,240,120,0.85)" },
+      ],
+    },
     {
       label: "Branding",
       chips: [
-        { content: "Identity",        color: "#19221b", bgColor: "rgba(156,229,92,0.92)"  },
-        { content: "Visual Language", color: "#19221b", bgColor: "rgba(200,240,120,0.85)" },
-        { content: "Logo Design",     color: "#fff",    bgColor: "rgba(30,30,30,0.85)"    },
+        { content: "Naming",        color: "#19221b", bgColor: "rgba(156,229,92,0.92)"  },
+        { content: "Visual System", color: "#19221b", bgColor: "rgba(200,240,120,0.85)" },
+        { content: "Visual Identity",     color: "#fff",    bgColor: "rgba(30,30,30,0.85)"    },
         { content: "✦",              color: "#c75a00", bgColor: "transparent"             },
       ],
     },
@@ -30,15 +40,6 @@ const MISSION_CONFIG = {
         { content: "Campaigns",    color: "#0243d0", bgColor: "rgba(200,220,255,0.9)"  },
         { content: "Photography",  color: "#787051", bgColor: "rgba(249,234,192,0.92)" },
         { content: "✦",           color: "#fff",    bgColor: "transparent"             },
-      ],
-    },
-    {
-      label: "Strategy",
-      chips: [
-        { content: "Positioning", color: "#b50338", bgColor: "rgba(255,160,209,0.88)" },
-        { content: "Narrative",   color: "#fff",    bgColor: "rgba(95,158,160,0.85)"  },
-        { content: "Research",    color: "#19221b", bgColor: "rgba(240,230,140,0.88)" },
-        { content: "✦",          color: "#c75a00", bgColor: "transparent"             },
       ],
     },
     {
@@ -219,22 +220,22 @@ export default function Mission() {
         </motion.p>
 
         {/* CTA */}
-        <motion.div custom={3} variants={fadeUp} initial="hidden" animate={isInView ? "visible" : "hidden"}>
+      {/*/<motion.div custom={3} variants={fadeUp} initial="hidden" animate={isInView ? "visible" : "hidden"}>
           <a href={MISSION_CONFIG.ctaTarget} className="mission-cta" onClick={handleCta}>
             <span className="mission-cta-label">{MISSION_CONFIG.cta}</span>
             <span className="mission-cta-arrow" aria-hidden="true">↓</span>
           </a>
-        </motion.div>
+        </motion.div>*/}
 
         {/* Services eyebrow */}
         <motion.p className="mission-services-eyebrow" custom={4} variants={fadeUp} initial="hidden" animate={isInView ? "visible" : "hidden"}>
-          That's the stuff I do
+          My work stretches across the fields of
         </motion.p>
 
         {/* Services list */}
         <ol className="mission-services-list" aria-label="Services">
           {MISSION_CONFIG.services.map((service, i) => (
-            <ServiceRow key={service.label} service={service} index={i} isInView={isInView} />
+            <ServiceRow key={service.label} service={service}  isInView={isInView} />
           ))}
         </ol>
 

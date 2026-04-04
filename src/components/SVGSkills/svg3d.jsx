@@ -21,7 +21,7 @@ const Svg3D = (props) => (
     */}
     <path 
       d="M291.74,582.98c-77.79,0-150.93-30.29-205.94-85.3C30.79,442.67.5,369.54.5,291.74S30.79,140.81,85.8,85.8C140.81,30.79,213.95.5,291.74.5s150.93,30.29,205.94,85.3c55.01,55.01,85.3,128.15,85.3,205.94s-30.29,150.93-85.3,205.94c-55.01,55.01-128.15,85.3-205.94,85.3Z"
-      style={{ fill: '#e23737ff', stroke: '#ffffffff', strokeWidth: 0 }} // Force a visible fill color
+      style={{ fill: '#ffa0d1e0', stroke: '#ffffffff', strokeWidth: 0 }} // Force a visible fill color
     />
     
     {/* 2. TEXT LABEL 

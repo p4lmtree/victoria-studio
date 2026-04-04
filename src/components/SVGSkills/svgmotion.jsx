@@ -21,7 +21,7 @@ const svgmotion = (props) => (
     */}
     <path 
       d="M268.16,535.83c-16.93,0-32.85-6.59-44.82-18.56L19.06,312.98c-24.71-24.71-24.71-64.92,0-89.63L223.35,19.06C235.32,7.09,251.24.5,268.16.5s32.84,6.59,44.82,18.56l204.28,204.28c24.71,24.71,24.71,64.92,0,89.63l-204.28,204.28c-11.97,11.97-27.89,18.56-44.82,18.56Z"
-      style={{ fill: '#2553c9ff', stroke: '#ffffff', strokeWidth: 0 }} // Force a visible fill color
+      style={{ fill: '#c8dcffe6', stroke: '#ffffff', strokeWidth: 0 }} // Force a visible fill color
     />
     
     {/* 2. TEXT LABEL 
@@ -36,7 +36,7 @@ const svgmotion = (props) => (
       style={{ 
         fontFamily: 'Inter, sans-serif', // Use a web-safe font or ensure 'Inter-Regular' is loaded
         fontSize: '100px', 
-        fill: '#ffffffff',
+        fill: '#0243d0',
         fontWeight: 'regular' // Optional: make it stand out
       }}
     >

@@ -109,14 +109,17 @@
   text-transform: uppercase;
   opacity: 0.5;
   margin: 0;
+  font-family: "Nuckle";
+
 }
 
 .about-bio {
-  font-size: 1rem;
+  font-size: 0.8rem;
   line-height: 1.65;
   margin: 0.5rem 0 0;
   max-width: 420px;
   opacity: 0.75;
+  font-family: "Nuckle";
 }
 
 /* ── Contact column ─────────────────────────────────────────────── */
@@ -221,10 +224,6 @@
 }
 
 /* ── Skills column ──────────────────────────────────────────────── */
-
-.about-col-skills {
-  /* takes full width on mobile, defined in grid on desktop */
-}
 
 .skill-cloud {
   position: relative;

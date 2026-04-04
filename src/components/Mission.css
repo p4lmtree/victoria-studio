@@ -30,7 +30,7 @@
 }
 
 .dark .mission-rule-left {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0);
 }
 
 .mission-inner {
@@ -70,7 +70,7 @@
 
 .mission-statement {
   font-family: 'Nuckle', sans-serif;
-  font-size: clamp(2rem, 7vw, 5rem);
+  font-size: clamp(2rem, 7vw, 3.5rem);
   font-weight: 100;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -192,7 +192,7 @@
 .mission-service-letter {
   display: inline-block;
   font-family: 'Nuckle', sans-serif;
-  font-size: clamp(2.2rem, 8vw, 5rem);
+  font-size: clamp(2.2rem, 8vw, 3.5rem);
   font-weight: 100;
   letter-spacing: -0.02em;
   line-height: 0.9;

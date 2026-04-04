@@ -1,4 +1,4 @@
-/* Navbar.css — architecture bureau edition */
+/* Navbar.css — frosted glass edition */
 
 /* =================================================================== */
 /* BASE / DESKTOP                                                       */
@@ -9,56 +9,94 @@
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  width: 100%;
-  padding: 1rem 2rem;
   top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.1rem 2rem;
   z-index: 40;
-  border-bottom-style: solid;
-  border-color: transparent;
-  background-color: transparent;
   box-sizing: border-box;
+
+  /* The frost effect lives here — driven by JS via inline style */
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+
+-webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+
+  /* No transition here — Framer Motion handles the easing */
 }
 
 .dark .navbar {
   color: #ffffff;
 }
 
+/* ── Title ───────────────────────────────────────────────────────────── */
+
 .navbar-title {
   font-family: 'Nuckle', sans-serif;
   font-weight: 300;
-  font-size: 1rem;
-  letter-spacing: 0.04em;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
   margin: 0;
   z-index: 101;
+  /* Subtle: slightly muted so it doesn't compete with content */
+  opacity: 0.75;
 }
 
-/* Desktop links */
+/* ── Desktop links ───────────────────────────────────────────────────── */
+
 .navbar-links {
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.navbar-links a {
-  text-decoration: none;
-  font-weight: 300;
-  color: inherit;
+/* Each link wrapper */
+.nav-link {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  padding-bottom: 2px; /* space for the underline */
 }
 
-/* Right side cluster */
+.nav-link-text {
+  font-family: 'Nuckle', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  /* Dim slightly at rest so hover feels alive */
+  opacity: 0.65;
+  transition: opacity 0.25s ease;
+}
+
+.nav-link:hover .nav-link-text {
+  opacity: 1;
+}
+
+/* The sliding underline */
+.nav-link-line {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform-origin: left;
+  /* scaleX is driven by Framer Motion */
+}
+
+/* ── Right cluster ───────────────────────────────────────────────────── */
+
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   z-index: 101;
-}
-
-.navbar-toggle {
-  /* just a wrapper */
 }
 
 /* Hamburger — hidden on desktop */
@@ -68,39 +106,17 @@
   border: none;
   cursor: pointer;
   padding: 0.4rem;
-  z-index: 101;
-}
-
-/* ── Scribble styles (unchanged) ──────────────────────────────────── */
-.scribble-link-wrapper {
-  display: inline-block;
-  overflow: visible !important;
-}
-
-.scribble-svg {
-  position: absolute;
-  top: -50%;
-  left: -20%;
-  width: 140%;
-  height: 300%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.scribble-content {
-  position: relative;
-  z-index: 2;
-  padding: 0 5px;
+  color: inherit;
 }
 
 /* =================================================================== */
-/* HAMBURGER ICON                                                       */
+/* HAMBURGER                                                            */
 /* =================================================================== */
 
 .hamburger {
   display: block;
-  width: 22px;
-  height: 2px;
+  width: 20px;
+  height: 1.5px;
   background-color: currentColor;
   position: relative;
   transition: background-color 0.25s ease;
@@ -110,65 +126,63 @@
 .hamburger::after {
   content: '';
   display: block;
-  width: 22px;
-  height: 2px;
+  width: 20px;
+  height: 1.5px;
   background-color: currentColor;
   position: absolute;
   transition: transform 0.3s ease, top 0.3s ease;
 }
 
-.hamburger::before { top: -7px; }
-.hamburger::after  { top:  7px; }
+.hamburger::before { top: -6px; }
+.hamburger::after  { top:  6px; }
 
-.hamburger.open { background-color: transparent; }
-.hamburger.open::before { transform: rotate(45deg);  top: 0; }
-.hamburger.open::after  { transform: rotate(-45deg); top: 0; }
+.hamburger.open                { background-color: transparent; }
+.hamburger.open::before        { transform: rotate(45deg);  top: 0; }
+.hamburger.open::after         { transform: rotate(-45deg); top: 0; }
 
 /* =================================================================== */
-/* MOBILE OVERLAY MENU                                                  */
+/* MOBILE OVERLAY                                                       */
 /* =================================================================== */
 
 .mobile-menu {
   position: fixed;
-  inset: 0;                       /* top/right/bottom/left: 0 */
+  inset: 0;
   z-index: 200;
-  background-color: #ffffff;
+  background-color: #fafafa;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-
-  /* clip-path is animated by Framer Motion */
   will-change: clip-path;
 }
 
 .dark .mobile-menu {
-  background-color: rgb(20, 20, 20);
+  background-color: rgb(16, 16, 16);
   color: #ffffff;
 }
 
-/* Top bar — mirrors the navbar height */
+/* Top bar */
 .mobile-menu-topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid rgba(30, 30, 30, 0.1);
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid rgba(30, 30, 30, 0.08);
   flex-shrink: 0;
 }
 
 .dark .mobile-menu-topbar {
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .mobile-menu-logo {
   font-family: 'Nuckle', sans-serif;
   font-weight: 300;
-  font-size: 0.9rem;
-  letter-spacing: 0.04em;
-  opacity: 0.5;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  opacity: 0.4;
 }
 
-/* Close × button */
+/* Close button */
 .mobile-menu-close {
   background: none;
   border: none;
@@ -182,8 +196,8 @@
 
 .close-icon {
   display: block;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   position: relative;
 }
 
@@ -191,8 +205,8 @@
 .close-icon::after {
   content: '';
   display: block;
-  width: 22px;
-  height: 2px;
+  width: 20px;
+  height: 1.5px;
   background-color: currentColor;
   position: absolute;
   top: 50%;
@@ -206,7 +220,7 @@
   flex: 1;
   display: flex;
   align-items: flex-start;
-  padding: 2rem 1.25rem 1rem;
+  padding: 2.5rem 1.5rem 1rem;
 }
 
 .mobile-menu-list {
@@ -216,13 +230,12 @@
   width: 100%;
 }
 
-/* Each item */
 .mobile-menu-item {
   position: relative;
-  padding: 1.25rem 0 1.1rem;
+  padding: 1.1rem 0 1rem;
   display: flex;
   align-items: baseline;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 .mobile-menu-item-line {
@@ -231,28 +244,25 @@
   left: 0;
   width: 100%;
   height: 1px;
-  background-color: rgba(30, 30, 30, 0.12);
+  background-color: rgba(30, 30, 30, 0.1);
 }
 
 .dark .mobile-menu-item-line {
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Index number */
 .mobile-menu-index {
   font-family: 'Nuckle', sans-serif;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  opacity: 0.35;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  opacity: 0.3;
   flex-shrink: 0;
   align-self: center;
-  padding-top: 0.2em; /* optical alignment */
 }
 
-/* Link text */
 .mobile-menu-link {
   font-family: 'Nuckle', sans-serif;
-  font-size: clamp(2.2rem, 10vw, 3rem);
+  font-size: clamp(2rem, 9vw, 2.8rem);
   font-weight: 100;
   letter-spacing: -0.02em;
   line-height: 1.05;
@@ -262,7 +272,7 @@
 }
 
 .mobile-menu-link:hover {
-  opacity: 0.45;
+  opacity: 0.4;
 }
 
 /* Footer row */
@@ -270,21 +280,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem 2rem;
-  border-top: 1px solid rgba(30, 30, 30, 0.1);
+  padding: 1rem 1.5rem 2.5rem;
+  border-top: 1px solid rgba(30, 30, 30, 0.08);
   flex-shrink: 0;
   font-family: 'Nuckle', sans-serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  opacity: 0.4;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  opacity: 0.35;
 }
 
 .dark .mobile-menu-footer {
-  border-top-color: rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.08);
 }
 
 /* =================================================================== */
-/* MOBILE OVERRIDE (≤ 768px)                                           */
+/* MOBILE (≤ 768px)                                                    */
 /* =================================================================== */
 
 @media (max-width: 768px) {
@@ -292,12 +302,10 @@
     padding: 1rem 1.25rem;
   }
 
-  /* Hide desktop links */
   .navbar-links {
     display: none;
   }
 
-  /* Show hamburger */
   .menu-toggle {
     display: flex;
     align-items: center;

@@ -7,11 +7,11 @@ import SkillSvgMap from "./SVGSkills";
 // ✏️  EDIT THIS SECTION — fill in your real info                       //
 // =================================================================== //
 const ABOUT_CONFIG = {
-  headline: "About", // section label
+  // headline: "About", // section label
 
   intro: {
     name: "Victoria Plasteig",
-    role: "Creative Designer & Art Director",
+    role: "Creative Strategist & Art Director",
     // A punchy 1–2 sentence bio. Keep it human.
     bio: "I help brands find their visual voice — through strategy, identity, and design that sticks. Based in Amsterdam, working globally.",
   },
