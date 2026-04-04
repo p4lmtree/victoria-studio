@@ -24,6 +24,9 @@
   "dependencies": {
   
     
+  "@vercel/analytics": "^2.0.1",
+  
+    
   "framer-motion": "^10.18.0",
   
     
